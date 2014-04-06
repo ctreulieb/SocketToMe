@@ -10,7 +10,7 @@ class UDPSocket {
 private :
 	SOCKET hsocket;
 public:
-	UDPSocket();
-
+	UDPSocket(std::string attr, int port);
+	~UDPSocket();
 };
 #endif
