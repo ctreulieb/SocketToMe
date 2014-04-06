@@ -1,16 +1,11 @@
 #if !defined( GUARD_TCP_SOCKET)
 #define GUARD_TCP_SOCKET
 
-#include <WinSock2.h>
-#pragma comment (lib,"ws2_32.lib")
+#include <Socket.hpp>
 
-class TCPSocket{
-private:
-	SOCKET hsocket;
+class TCPSocket : CTSocket{
 public:
-	TCPSocket(std::string attr, int port);
-	~TCPSocket();
-	bool bind();
+	TCPSocket(std::string addr, int port);
 	bool listen();
 	bool connect();
 

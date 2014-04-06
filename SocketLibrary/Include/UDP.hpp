@@ -1,20 +1,12 @@
 #if !defined( GUARD_UDP_SOCKET )
 #define GUARD_UDP_SOCKET
 
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#pragma comment (lib,"ws2_32.lib")
+#include <Socket.hpp>
 
-#include<string>
-class UDPSocket {
-private :
-	sockaddr_in socketAddress;
-	SOCKET hSocket;
+class UDPSocket : CTSocket{
 public:
-	UDPSocket(std::string attr, int port);
-	~UDPSocket();
+	UDPSocket(std::string addr, int port);
 
-	bool bind();
 };
 
 class UDPAddress {
