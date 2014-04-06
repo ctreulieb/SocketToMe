@@ -1,0 +1,25 @@
+myTCP
+	SOCKET h;
+	bool bindAndListen();
+	bool connect();
+myUDP
+	SOCKET h;
+	bool bind();
+TCP
+	bind * Server
+	listen * Server
+	accept * uses own socket
+	connect + needs unconnected socket 
+	myTcp serv1.connect(addr, port)
+	{	
+		
+	}
+	send - needs socket
+	recv - needs socket
+UDP
+	bind *
+	sendto - use your own socket
+		needs address and char*
+	recvfrom - use your own socket
+	
+	

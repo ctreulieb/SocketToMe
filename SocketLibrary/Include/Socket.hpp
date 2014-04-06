@@ -1,5 +1,5 @@
-#if !defined( GUARD_SOCKET_GT )
-#define GUARD_SOCKET_GT
+#if !defined( GUARD_MY_SOCKET_GT )
+#define GUARD_MY_SOCKET_GT
 
 #if defined(_DEBUG) && !defined(_DLL)
 #pragma comment (lib, "Socket-mt-s-gd.lib") //mt = multithread, s = static, gd = gnu debugger
@@ -10,8 +10,8 @@
 #elif !defined(_DEBUG) && defined(_DLL)
 #pragma comment (lib, "Socket-mt.lib")
 #endif
+#include <UDP.hpp>
+#include <TCP.hpp>
 
-#include <string>
-int getButt(int a);
-//stuff here
+
 #endif
