@@ -8,9 +8,19 @@
 #include<string>
 class UDPSocket {
 private :
-	SOCKET hsocket;
+	sockaddr_in socketAddress;
+	SOCKET hSocket;
 public:
 	UDPSocket(std::string attr, int port);
 	~UDPSocket();
+
+	bool bind();
 };
+
+class UDPAddress {
+	friend class UDPSocket; 
+private:
+	sockaddr address;
+};
+
 #endif
