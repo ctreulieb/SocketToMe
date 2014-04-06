@@ -285,6 +285,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="UDP.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
