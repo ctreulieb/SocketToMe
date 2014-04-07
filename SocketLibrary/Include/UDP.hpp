@@ -3,16 +3,28 @@
 
 #include <Socket.hpp>
 
-class UDPSocket : CTSocket{
-public:
-	UDPSocket(std::string addr, int port);
-
-};
-
 class UDPAddress {
 	friend class UDPSocket; 
 private:
 	sockaddr address;
 };
+
+
+struct RecvResponse
+{
+	char* msg;
+	UDPAddress recvAddr;
+};
+
+class UDPSocket : CTSocket {
+public:
+	UDPSocket(std::string addr, int port);
+	RecvResponse recvFromSocket();
+	void sendToSocket(std::string msg, UDPAddress);
+	void sendToSocket(std::string msg);
+};
+
+
+
 
 #endif
