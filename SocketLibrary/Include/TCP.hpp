@@ -6,8 +6,8 @@
 class TCPSocket : CTSocket{
 public:
 	TCPSocket(std::string addr, int port);
-	bool listen();
-	bool connect();
+	bool startListen();
+	bool connectToSocket();
 
 };
 
