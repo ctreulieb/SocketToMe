@@ -6,3 +6,15 @@ TCPSocket::TCPSocket(std::string addr, int port) : CTSocket(addr, port ){
 	socketAddr.sin_addr.s_addr = inet_addr(addr.c_str());
 	socketAddr.sin_port = htons(port);
 }
+
+bool TCPSocket::startListen()
+{
+	return !(listen(hSocket, 1)==SOCKET_ERROR);
+	//todo: error
+}
+
+bool TCPSocket::connectToSocket()
+{
+	return !(connect(hSocket, (SOCKADDR*) &socketAddr, sizeof(socketAddr))== SOCKET_ERROR);
+	//todo error
+}
