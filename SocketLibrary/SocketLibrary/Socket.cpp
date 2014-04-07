@@ -18,6 +18,6 @@ CTSocket::~CTSocket()
 
 bool CTSocket::bindSocket() {
 	int res = bind(hSocket, (sockaddr*)&socketAddr, sizeof(socketAddr));
-
+	// TODO: Error handling
 	return !(res==SOCKET_ERROR);
 }
