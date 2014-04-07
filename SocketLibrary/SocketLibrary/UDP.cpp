@@ -9,6 +9,8 @@ UDPSocket::UDPSocket(std::string addr, int port) : CTSocket(addr, port ){
 	socketAddr.sin_addr.s_addr	= inet_addr(addr.c_str());
 }
 
+UDPSocket::~UDPSocket() { }
+
 RecvResponse UDPSocket::recvFromSocket() {
 	sockaddr clientAddress;
 	socklen_t cbClientAddress = sizeof(clientAddress);

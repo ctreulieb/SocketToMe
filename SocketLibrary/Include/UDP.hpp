@@ -16,9 +16,10 @@ struct RecvResponse
 	UDPAddress recvAddr;
 };
 
-class UDPSocket : CTSocket {
+class UDPSocket : public CTSocket {
 public:
 	UDPSocket(std::string addr, int port);
+	~UDPSocket();
 	RecvResponse recvFromSocket();
 	void sendToSocket(std::string msg, UDPAddress);
 	void sendToSocket(std::string msg);
