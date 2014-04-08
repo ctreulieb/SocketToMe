@@ -9,7 +9,6 @@ private:
 	sockaddr address;
 };
 
-
 struct RecvResponse
 {
 	char* msg;
@@ -24,8 +23,5 @@ public:
 	void sendToSocket(std::string msg, UDPAddress);
 	void sendToSocket(std::string msg);
 };
-
-
-
 
 #endif

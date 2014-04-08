@@ -1,6 +1,7 @@
 #include <UDP.hpp>
 
-UDPSocket::UDPSocket(std::string addr, int port) : CTSocket(addr, port ){
+
+UDPSocket::UDPSocket(std::string addr, int port) : CTSocket(addr, port ) {
 
 	hSocket = socket( AF_INET, SOCK_DGRAM, 0 );
 	//TODO error handling for bad socket construction

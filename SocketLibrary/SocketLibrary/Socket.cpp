@@ -1,4 +1,4 @@
-#include <SocketLibrary.hpp>
+#include <Socket.hpp>
 
 CTSocket::CTSocket(std::string addr, int port)
 {
