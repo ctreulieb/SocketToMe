@@ -11,18 +11,20 @@ int main() {
 
 
 	while(getline(cin,line)) {
+		RecvResponse recv;
 		socket.sendToSocket() << line;
-		RecvResponse recv = socket.recvFromSocket();
+		
+		socket.recvFromSocket(recv) >> line;
 		if(recv.n==-1) {
 			cout << "no reply" << endl;
 		} else {
 			string const terminateMsg = "server exit";
-			string msg = recv.msg;
-			if(msg ==terminateMsg) {
+			//string msg = recv.msg;
+			if(line ==terminateMsg) {
 				cout << "Server terminated" << endl;
 				break;
 			}
-			cout << recv.n << ":" << msg << endl; 
+			cout << recv.n << ":" << line << endl; 
 		}
 	}
 }

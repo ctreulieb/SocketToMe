@@ -10,12 +10,12 @@ private:
 	sockaddr address;
 };
 
-struct RecvResponse
+class RecvResponse
 {
+public:
 	int n;
-	//char msg[65507];
-	char msg[500];
-	UDPAddress recvAddr;
+	std::istringstream msg;
+	UDPAddress recvAddr;	
 };
 
 class UDPSocket : public CTSocket {
@@ -42,11 +42,12 @@ public:
 				pUDPSocket->sendToSocketImpl(oss.str());
 			}
 		}
-		inline std::ostringstream& stream() {return oss;}
+		inline std::ostringstream& stream() { return oss; }
 	};
+	
 	UDPSocket(std::string addr, int port);
 	~UDPSocket();
-	RecvResponse recvFromSocket();
+	RecvResponse& recvFromSocket(RecvResponse &response);
 	Send sendToSocket() {
 		return Send(this);
 	}
@@ -58,6 +59,12 @@ public:
 template<typename T>
 inline std::ostream& operator << (UDPSocket::Send& e, T item) {
 	return e.stream() << item;
+}
+
+
+template<typename T>
+inline std::istream& operator >> (RecvResponse& e, T &item) {
+	return e.msg >> item;
 }
 
 #endif

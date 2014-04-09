@@ -11,14 +11,15 @@ int main() {
 	socket.bindSocket();
 
 	for(;;) {
-		RecvResponse recv = socket.recvFromSocket();
-		//recv.msg[0] = toupper(recv.msg[0]);
-		cout << "Recv: " << recv.msg << endl;
-		if(!strcmp(recv.msg,"!quit")) {
+		string line;
+		RecvResponse recv;
+		socket.recvFromSocket(recv) >> line;
+		cout << "Recv: " << line << endl;
+		if(line == "!quit") {
 			string const terminateMsg = "server exit";
-			socket.sendToSocket(recv.recvAddr) << recv.msg;
+			socket.sendToSocket(recv.recvAddr) << line;
 		}
-		socket.sendToSocket(recv.recvAddr) << recv.msg;
+		socket.sendToSocket(recv.recvAddr) << line;
 	}
 
 }

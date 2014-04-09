@@ -12,14 +12,16 @@ UDPSocket::UDPSocket(std::string addr, int port) : CTSocket(addr, port ) {
 
 UDPSocket::~UDPSocket() { }
 
-RecvResponse UDPSocket::recvFromSocket() {
+RecvResponse& UDPSocket::recvFromSocket(RecvResponse &response) {
 	sockaddr clientAddress;
 	socklen_t cbClientAddress = sizeof(clientAddress);
-	RecvResponse response;
+
 	int const MAX_LINE = 500;
-	int n = recvfrom(hSocket, response.msg, MAX_LINE, 0, &clientAddress, &cbClientAddress);
-	response.msg[min(n,499)]=0;
+	char msg[MAX_LINE];
+	int n = recvfrom(hSocket, msg, MAX_LINE, 0, &clientAddress, &cbClientAddress);
+	msg[min(n,499)]=0;
 	UDPAddress addr;
+	response.msg = std::istringstream(msg); 
 	addr.address = clientAddress;
 	response.recvAddr = addr;
 	response.n = n;
