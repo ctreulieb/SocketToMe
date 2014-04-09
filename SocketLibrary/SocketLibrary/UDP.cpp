@@ -15,16 +15,14 @@ UDPSocket::~UDPSocket() { }
 RecvResponse UDPSocket::recvFromSocket() {
 	sockaddr clientAddress;
 	socklen_t cbClientAddress = sizeof(clientAddress);
-	int const MAX_LINE = 256;
-	char msg[MAX_LINE];
-	int n = recvfrom(hSocket,msg,MAX_LINE,0,&clientAddress,&cbClientAddress);
-	msg[min(n,255)]=0;
-
 	RecvResponse response;
+	int const MAX_LINE = 65507;
+	int n = recvfrom(hSocket, response.msg, MAX_LINE, 0, &clientAddress, &cbClientAddress);
+	response.msg[min(n,255)]=0;
 	UDPAddress addr;
 	addr.address = clientAddress;
 	response.recvAddr = addr;
-	response.msg = msg;
+	response.n = n;
 	return response;
 }
 

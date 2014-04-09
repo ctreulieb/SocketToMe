@@ -11,7 +11,8 @@ private:
 
 struct RecvResponse
 {
-	char* msg;
+	int n;
+	char msg[65507];
 	UDPAddress recvAddr;
 };
 
