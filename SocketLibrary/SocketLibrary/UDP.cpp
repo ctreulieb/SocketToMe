@@ -16,9 +16,9 @@ RecvResponse UDPSocket::recvFromSocket() {
 	sockaddr clientAddress;
 	socklen_t cbClientAddress = sizeof(clientAddress);
 	RecvResponse response;
-	int const MAX_LINE = 65507;
+	int const MAX_LINE = 500;
 	int n = recvfrom(hSocket, response.msg, MAX_LINE, 0, &clientAddress, &cbClientAddress);
-	response.msg[min(n,255)]=0;
+	response.msg[min(n,499)]=0;
 	UDPAddress addr;
 	addr.address = clientAddress;
 	response.recvAddr = addr;
@@ -26,14 +26,14 @@ RecvResponse UDPSocket::recvFromSocket() {
 	return response;
 }
 
-void UDPSocket::sendToSocket(std::string msg, UDPAddress addr){
+void UDPSocket::sendToSocketImpl(std::string msg, UDPAddress addr){
 
 	sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&addr.address, 
 		sizeof(addr.address)
 			);  	
 }
 
-void UDPSocket::sendToSocket(std::string msg) {
+void UDPSocket::sendToSocketImpl(std::string msg) {
 	sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&socketAddr, 
 			sizeof(socketAddr)
 			);  

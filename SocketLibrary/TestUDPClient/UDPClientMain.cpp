@@ -11,7 +11,7 @@ int main() {
 
 
 	while(getline(cin,line)) {
-		socket.sendToSocket(line);
+		socket.sendToSocket() << line;
 		RecvResponse recv = socket.recvFromSocket();
 		if(recv.n==-1) {
 			cout << "no reply" << endl;
@@ -22,7 +22,7 @@ int main() {
 				cout << "Server terminated" << endl;
 				break;
 			}
-			cout << recv.n << ":" << msg; 
+			cout << recv.n << ":" << msg << endl; 
 		}
 	}
 }

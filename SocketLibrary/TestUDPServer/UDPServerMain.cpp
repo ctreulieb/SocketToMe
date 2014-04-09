@@ -16,9 +16,9 @@ int main() {
 		cout << "Recv: " << recv.msg << endl;
 		if(!strcmp(recv.msg,"!quit")) {
 			string const terminateMsg = "server exit";
-			socket.sendToSocket(string(recv.msg), recv.recvAddr);
+			socket.sendToSocket(recv.recvAddr) << recv.msg;
 		}
-		socket.sendToSocket(string(recv.msg), recv.recvAddr);
+		socket.sendToSocket(recv.recvAddr) << recv.msg;
 	}
 
 }
