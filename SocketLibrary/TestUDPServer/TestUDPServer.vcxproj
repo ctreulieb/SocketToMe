@@ -41,11 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-<<<<<<< HEAD
-    <IncludePath>$(SolutionDir)/include;$(IncludePath)</IncludePath>
-=======
     <IncludePath>$(SolutionDir)/Include;$(IncludePath)</IncludePath>
->>>>>>> 04a811a9a2f90fbbaeb2abed4c900fb3fe3c56f4
     <LibraryPath>$(SolutionDir)/Lib/$(PlatformTarget);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
