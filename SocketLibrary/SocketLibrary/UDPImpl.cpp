@@ -1,7 +1,7 @@
 #include <UDPpimpl.hpp>
 
 class UDPAddress {
-	friend class UDPSocketA::UDPimpl; 
+	friend class UDPSocketA::UDPimpl;
 private:
 	sockaddr address;
 public:
@@ -24,7 +24,7 @@ class UDPSocketA::UDPimpl : public CTSocket {
 private:
 	void sendToSocketImpl(std::string msg, UDPAddress addr) {
 		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&addr.address, 
-		sizeof(addr.address)); 
+			sizeof(addr.address)); 
 	}
 	void sendToSocketImpl(std::string msg) {
 		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&socketAddr, 

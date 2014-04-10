@@ -1,12 +1,10 @@
 #include<SocketLibrary.hpp>
-
-
 #include<iostream>
 #include<string>
 using namespace std;
 
 int main() {
-	UDPSocketA socket("127.0.1",49152);
+	UDPSocket socket("127.0.1",49152);
 	string line;
 
 	while(getline(cin,line)) {

@@ -34,11 +34,25 @@ void TCPSocket::sendToImpl(std::string msg, TCPConnection conn)
 	send(conn.hAccepted, msg.c_str(),msg.size(),0);
 }
 
+void TCPSocket::sendToImpl(std::string msg)
+{
+	send(hSocket, msg.c_str(),msg.size(),0);
+}
+
 TCPResponse& TCPSocket::recvFrom(TCPResponse &response, TCPConnection conn)
 {
 	int const MAX_LINE= 500;
 	char msg[MAX_LINE];
 	response.n = recv(conn.hAccepted,msg,MAX_LINE,0);
+	response.msg = std::istringstream(msg);
+	return response;
+}
+
+TCPResponse& TCPSocket::recvFrom(TCPResponse &response)
+{
+	int const MAX_LINE= 500;
+	char msg[MAX_LINE];
+	response.n = recv(hSocket, msg,MAX_LINE,0);
 	response.msg = std::istringstream(msg);
 	return response;
 }

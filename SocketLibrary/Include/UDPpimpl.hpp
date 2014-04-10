@@ -2,7 +2,7 @@
 #define UDP_PIMPL_SOCKET
 #include <Socket.hpp>
 class UDPAddress;
-struct UDPResponse;
+class UDPResponse;
 class UDPSocketA {
 	friend class UDPAddress;
 	class UDPimpl;
