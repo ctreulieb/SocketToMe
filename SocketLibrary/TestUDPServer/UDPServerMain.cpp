@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
 
-	UDPSocket socket("127.0.1",49152);
+	UDPSocketA socket("127.0.1",49152);
 	vector<UDPAddress> clientAddresses;
 	socket.bindSocket();
 

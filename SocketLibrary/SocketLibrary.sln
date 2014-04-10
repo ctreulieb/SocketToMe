@@ -8,7 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Include\Socket.hpp = Include\Socket.hpp
 		Include\SocketLibrary.hpp = Include\SocketLibrary.hpp
 		Include\TCP.hpp = Include\TCP.hpp
+		Include\TCPpimpl.hpp = Include\TCPpimpl.hpp
 		Include\UDP.hpp = Include\UDP.hpp
+		Include\UDPpimpl.hpp = Include\UDPpimpl.hpp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{469459C4-82F9-4ED5-BA5D-9A78CE241CC4}"

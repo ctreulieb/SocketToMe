@@ -10,8 +10,9 @@
 #elif !defined(_DEBUG) && defined(_DLL)
 #pragma comment (lib, "SocketLibrary-mt.lib")
 #endif
-#include <UDP.hpp>
+//#include <UDP.hpp>
 #include <TCP.hpp>
+#include <UDPpimpl.hpp>
 
 
 
