@@ -3,19 +3,20 @@
 #include<string>
 using namespace std;
 int main(){
-	TCPSocket socket("127.0.1", 49153);
+	TCPSocket socket("127.0.1", 45153);
 	bool result = socket.bindSocket();
 	if(!result) {
 		cout << "bind() failed";
 	}
 	result = socket.startListen();
 	if(!result) {
-		cout << "Lison() failed";
+		cout << "Listen() failed";
 	}
 	TCPConnection client = socket.acceptConnection();
 	cout << "client connected" <<endl;
-	string line;
+	
 	for(;;) {
+		string line;
 		TCPResponse response;
 		socket.recvFrom(response,client)  >> line;
 		cout << "recv: " << line << endl;

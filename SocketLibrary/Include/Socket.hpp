@@ -14,6 +14,7 @@ public:
 	bool bindSocket();
 protected:
 	SOCKET hSocket;
+	int getWSAErrorCode();
 	sockaddr_in socketAddr;
 };
 

@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(){
-	TCPSocket socket("127.0.1", 49153);
+	TCPSocket socket("127.0.1", 45153);
 
 	bool success = socket.connectToSocket();
 	if(!success) {
@@ -16,6 +16,6 @@ int main(){
 		socket.sendTo() << line;
 		TCPResponse response;
 		socket.recvFrom(response) >> line;
-		cout << "resv: " << line;
+		cout << "resv: " << line << endl;
 	}
 }
