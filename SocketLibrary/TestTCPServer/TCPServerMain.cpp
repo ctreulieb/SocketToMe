@@ -20,7 +20,7 @@ int main(){
 		socket.recvFrom(response,client)  >> line;
 		cout << "recv: " << line << endl;
 		line += "!!!";
-		socket.sendTo(client);
+		socket.sendTo(client) << line;
 	}
 
 }

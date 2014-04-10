@@ -31,12 +31,12 @@ TCPConnection TCPSocket::acceptConnection()
 
 void TCPSocket::sendToImpl(std::string msg, TCPConnection conn)
 {
-	send(conn.hAccepted, msg.c_str(),msg.size(),0);
+	send(conn.hAccepted, msg.c_str(),strlen(msg.c_str())+1,0);
 }
 
 void TCPSocket::sendToImpl(std::string msg)
 {
-	send(hSocket, msg.c_str(),msg.size(),0);
+	send(hSocket, msg.c_str(),strlen(msg.c_str())+1,0);
 }
 
 TCPResponse& TCPSocket::recvFrom(TCPResponse &response, TCPConnection conn)
