@@ -1,30 +1,26 @@
 #include<SocketLibrary.hpp>
 
 #include<iostream>
-
+#include<vector>
 using namespace std;
+
 
 int main() {
 
 	UDPSocket socket("127.0.1",49152);
-
+	vector<UDPAddress> clientAddresses;
 	socket.bindSocket();
-	double d;
-	float f;
-	string one;
-	string two;
 
-	RecvResponse r;
-	socket.recvFromSocket(r) >> d >> f >> one >> two; 
+	
 
-	cout << "double : " << d <<  endl;
-	cout << "float : " << f << endl;
-	cout << "string 1 : " << one << endl;
-	cout << "string 2 : " << two << endl;
 	for(;;) {
 		string line;
-		RecvResponse recv;
+		UDPResponse recv;
 		socket.recvFromSocket(recv);
+
+		if(clientAddresses.end() == std::find(clientAddresses.begin(),clientAddresses.end(),recv.recvAddr)) {
+			clientAddresses.push_back(recv.recvAddr);
+		}
 
 		cout << "Recv: ";
 		while(recv.msg >> line) {
@@ -35,7 +31,9 @@ int main() {
 			string const terminateMsg = "server exit";
 			socket.sendToSocket(recv.recvAddr) << line;
 		}
-		socket.sendToSocket(recv.recvAddr) << line;
+		for(unsigned i = 0; i < clientAddresses.size(); ++i) {
+			socket.sendToSocket(clientAddresses[i]) << line;
+		}
 	}
 
 }
