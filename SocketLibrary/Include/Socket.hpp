@@ -2,6 +2,7 @@
 #define GUARD_BASE_SOCKET
 #include <string>
 #include <sstream>
+#include <memory>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #pragma comment (lib,"ws2_32.lib")
