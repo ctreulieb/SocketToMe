@@ -9,11 +9,8 @@ int main() {
 	UDPSocket socket("127.0.1",49152);
 	string line;
 
-	socket.sendToSocket() << 2.0 << " " << 2.6f <<" " << "test" <<" " << "base"; 
-
-
 	while(getline(cin,line)) {
-		RecvResponse recv;
+		UDPResponse recv;
 		socket.sendToSocket() << line;
 		
 		socket.recvFromSocket(recv) >> line;

@@ -1,6 +1,12 @@
 #include <UDP.hpp>
 
 
+
+bool UDPAddress::operator==(const UDPAddress& addr ) const {
+	return (this->address.sa_data == addr.address.sa_data)&& (this->address.sa_family == addr.address.sa_family);
+}
+
+
 UDPSocket::UDPSocket(std::string addr, int port) : CTSocket(addr, port ) {
 
 	hSocket = socket( AF_INET, SOCK_DGRAM, 0 );
@@ -12,7 +18,7 @@ UDPSocket::UDPSocket(std::string addr, int port) : CTSocket(addr, port ) {
 
 UDPSocket::~UDPSocket() { }
 
-RecvResponse& UDPSocket::recvFromSocket(RecvResponse &response) {
+UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response) {
 	sockaddr clientAddress;
 	socklen_t cbClientAddress = sizeof(clientAddress);
 
@@ -40,5 +46,31 @@ void UDPSocket::sendToSocketImpl(std::string msg) {
 			sizeof(socketAddr)
 			);  
 }
+
+UDPSocket::SendStreamWrapper UDPSocket::sendToSocket() {
+	return UDPSocket::SendStreamWrapper(this);
+}
+
+UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(UDPAddress addr) {
+	return UDPSocket::SendStreamWrapper(this, addr);
+}
+
+UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p) : pUDPSocket(p) {
+	UDPSocket::SendStreamWrapper::specifiedAddr = false;
+}
+
+UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, UDPAddress a) : pUDPSocket(p), addr(a) {
+	UDPSocket::SendStreamWrapper::specifiedAddr = true;
+}
+
+UDPSocket::SendStreamWrapper::~SendStreamWrapper() {
+	if(specifiedAddr) {
+		UDPSocket::SendStreamWrapper::pUDPSocket->sendToSocketImpl(oss.str(),addr );
+	} else {
+		UDPSocket::SendStreamWrapper::pUDPSocket->sendToSocketImpl(oss.str());
+	}
+}
+
+
 
 
