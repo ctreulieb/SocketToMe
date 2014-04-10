@@ -7,14 +7,38 @@ TCPSocket::TCPSocket(std::string addr, int port) : CTSocket(addr, port ){
 	socketAddr.sin_port = htons(port);
 }
 
+TCPSocket::~TCPSocket() { }
+
 bool TCPSocket::startListen()
 {
-	return !(listen(hSocket, 1)==SOCKET_ERROR);
-	//todo: error
+	return !(listen(hSocket, SOMAXCONN)==SOCKET_ERROR);
 }
 
 bool TCPSocket::connectToSocket()
 {
 	return !(connect(hSocket, (SOCKADDR*) &socketAddr, sizeof(socketAddr))== SOCKET_ERROR);
-	//todo error
+}
+
+TCPConnection TCPSocket::acceptConnection()
+{
+	TCPConnection tcpcAccepted;
+	tcpcAccepted.hAccepted = SOCKET_ERROR;
+	while(tcpcAccepted.hAccepted == SOCKET_ERROR) {
+		tcpcAccepted.hAccepted = accept(hSocket,NULL,NULL);
+	}
+	return tcpcAccepted;
+}
+
+void TCPSocket::sendToImpl(std::string msg, TCPConnection conn)
+{
+	send(conn.hAccepted, msg.c_str(),msg.size(),0);
+}
+
+TCPResponse& TCPSocket::recvFrom(TCPResponse &response, TCPConnection conn)
+{
+	int const MAX_LINE= 500;
+	char msg[MAX_LINE];
+	response.n = recv(conn.hAccepted,msg,MAX_LINE,0);
+	response.msg = std::istringstream(msg);
+	return response;
 }

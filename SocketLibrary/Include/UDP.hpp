@@ -2,7 +2,6 @@
 #define GUARD_UDP_SOCKET
 
 #include <Socket.hpp>
-#include <sstream>
 
 class UDPAddress {
 	friend class UDPSocket; 
