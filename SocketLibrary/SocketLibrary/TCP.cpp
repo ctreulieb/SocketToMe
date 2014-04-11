@@ -11,7 +11,6 @@ TCPSocket::~TCPSocket() { }
 
 bool TCPSocket::startListen()
 {
-	int a;
 	return !(listen(hSocket, SOMAXCONN)==SOCKET_ERROR);
 }
 
