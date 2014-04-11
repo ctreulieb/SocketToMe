@@ -7,12 +7,15 @@ class UDPSocketA {
 	friend class UDPAddress;
 	class UDPimpl;
 	std::unique_ptr<UDPimpl> pUdp_;
+	void sendToSocketImpl(std::string msg, UDPAddress);
+	void sendToSocketImpl(std::string msg); 
 public:
+	class SendStreamWrapper;
 	UDPSocketA(std::string addr, int port);
 	virtual ~UDPSocketA();
 	UDPResponse& recvFromSocket(UDPResponse &response);
-	void sendToSocket();
-	void sendToSocket(UDPAddress addr);
+	SendStreamWrapper sendToSocket();
+	SendStreamWrapper sendToSocket(UDPAddress addr);
 	void bindSocket();
 };
 

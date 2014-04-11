@@ -8,9 +8,6 @@ public:
 	bool operator ==(const UDPAddress&) const;
 };
 
-bool UDPAddress::operator==(const UDPAddress& addr ) const {
-	return (this->address.sa_data == addr.address.sa_data)&& (this->address.sa_family == addr.address.sa_family);
-}
 
 class UDPResponse
 {
@@ -20,37 +17,14 @@ public:
 	UDPAddress recvAddr;	
 };
 
+
+bool UDPAddress::operator==(const UDPAddress& addr ) const {
+	return (this->address.sa_data == addr.address.sa_data)&& (this->address.sa_family == addr.address.sa_family);
+}
+
 class UDPSocketA::UDPimpl : public CTSocket {
-private:
-	void sendToSocketImpl(std::string msg, UDPAddress addr) {
-		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&addr.address, 
-			sizeof(addr.address)); 
-	}
-	void sendToSocketImpl(std::string msg) {
-		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&socketAddr, 
-			sizeof(socketAddr));
-	}
+	
 public:
-	class SendStreamWrapper {
-		UDPimpl* pUDPimpl;
-		std::ostringstream oss;
-		UDPAddress addr;
-		bool specifiedAddr;
-	public:
-		SendStreamWrapper(UDPimpl* p) : pUDPimpl(p) {
-			specifiedAddr = false;
-		}
-		SendStreamWrapper(UDPimpl* p, UDPAddress a) : pUDPimpl(p), addr(a) {
-			specifiedAddr = true;
-		}
-		~SendStreamWrapper() {
-			if(specifiedAddr)
-				pUDPimpl->sendToSocketImpl(oss.str(),addr);
-			else
-				pUDPimpl->sendToSocketImpl(oss.str());
-		} 
-		inline std::ostringstream& stream() { return oss; }
-	};
 	UDPimpl(std::string addr, int port) : CTSocket(addr, port) {
 		hSocket = socket( AF_INET, SOCK_DGRAM, 0 );
 		//TODO error handling for bad socket construction
@@ -73,16 +47,18 @@ public:
 		response.n = n;
 		return response;
 	}
-	SendStreamWrapper sendToSocket() {
-		return SendStreamWrapper(this);
+	void sendToSocket(std::string msg, UDPAddress addr) {
+		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&addr.address, 
+			sizeof(addr.address)); 
 	}
-	SendStreamWrapper sendToSocket(UDPAddress addr) {
-		return SendStreamWrapper(this, addr);
+	void sendToSocket(std::string msg) {
+		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&socketAddr, 
+			sizeof(socketAddr));
 	}
 };
 
 template<typename T>
-inline std::ostream& operator << (UDPSocketA::UDPimpl::SendStreamWrapper& e, T item) {
+inline std::ostream& operator << (UDPSocketA::SendStreamWrapper& e, T item) {
 	return e.stream() << item;
 }
 
@@ -99,14 +75,42 @@ UDPResponse& UDPSocketA::recvFromSocket(UDPResponse &response) {
 	return pUdp_->recvFromSocket(response);
 }
 
-void UDPSocketA::sendToSocket() {
-	pUdp_->sendToSocket();
+class UDPSocketA::SendStreamWrapper {
+	UDPSocketA* pUDPimpl;
+	std::ostringstream oss;
+	UDPAddress addr;
+	bool specifiedAddr;
+	public:
+		SendStreamWrapper(UDPSocketA* p) : pUDPimpl(p) {
+			specifiedAddr = false;
+		}
+		SendStreamWrapper(UDPSocketA* p, UDPAddress a) : pUDPimpl(p), addr(a) {
+			specifiedAddr = true;
+		}
+		~SendStreamWrapper() {
+			if(specifiedAddr)
+				pUDPimpl->sendToSocketImpl(oss.str(),addr);
+			else
+				pUDPimpl->sendToSocketImpl(oss.str());
+		} 
+		inline std::ostringstream& stream() { return oss; }
+};
+
+UDPSocketA::SendStreamWrapper UDPSocketA::sendToSocket() {
+	return UDPSocketA::SendStreamWrapper(this);
 }
 
-void UDPSocketA::sendToSocket(UDPAddress addr) {
-	pUdp_ ->sendToSocket(addr);
+UDPSocketA::SendStreamWrapper UDPSocketA::sendToSocket(UDPAddress addr) {
+	return UDPSocketA::SendStreamWrapper(this, addr);
 }
 
 void UDPSocketA::bindSocket() {
 	pUdp_->bindSocket();
 }
+
+void UDPSocketA::sendToSocketImpl(std::string msg, UDPAddress addr){
+	pUdp_->sendToSocket(msg,addr);
+}
+void UDPSocketA::sendToSocketImpl(std::string msg) {
+	pUdp_->sendToSocket(msg);
+} 
