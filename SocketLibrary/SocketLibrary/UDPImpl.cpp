@@ -44,6 +44,24 @@ public:
 };
 
 
+UDPSocketA::SendStreamWrapper::SendStreamWrapper(UDPSocketA* p) : pUDPimpl(p) {
+	specifiedAddr = false;
+};
+
+UDPSocketA::SendStreamWrapper::SendStreamWrapper(UDPSocketA* p, UDPAddress a) : pUDPimpl(p), addr(a) {
+	specifiedAddr = true;
+}
+
+UDPSocketA::SendStreamWrapper::~SendStreamWrapper() {
+	if(specifiedAddr)
+		pUDPimpl->sendToSocketImpl(oss.str(),addr);
+	else
+		pUDPimpl->sendToSocketImpl(oss.str());
+}
+
+
+std::ostringstream& UDPSocketA::SendStreamWrapper::stream() { return oss; }
+
 UDPSocketA::UDPSocketA(std::string addr, int port) : pUdp_(new UDPimpl(addr, port) ) {}
 UDPSocketA::~UDPSocketA() { }
 UDPResponse& UDPSocketA::recvFromSocket(UDPResponse &response) {

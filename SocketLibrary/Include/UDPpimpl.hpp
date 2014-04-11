@@ -33,19 +33,10 @@ public:
 	UDPAddress addr;
 	bool specifiedAddr;
 	public:
-		SendStreamWrapper(UDPSocketA* p) : pUDPimpl(p) {
-			specifiedAddr = false;
-		}
-		SendStreamWrapper(UDPSocketA* p, UDPAddress a) : pUDPimpl(p), addr(a) {
-			specifiedAddr = true;
-		}
-		~SendStreamWrapper() {
-			if(specifiedAddr)
-				pUDPimpl->sendToSocketImpl(oss.str(),addr);
-			else
-				pUDPimpl->sendToSocketImpl(oss.str());
-		} 
-		inline std::ostringstream& stream() { return oss; }
+		SendStreamWrapper(UDPSocketA* p); 
+		SendStreamWrapper(UDPSocketA* p, UDPAddress a);
+		~SendStreamWrapper();
+		std::ostringstream& stream();
 	};
 	UDPSocketA(std::string addr, int port);
 	virtual ~UDPSocketA();
