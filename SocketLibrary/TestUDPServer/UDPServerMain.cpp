@@ -26,6 +26,6 @@ int main() {
 			socket.sendToSocket(recv.recvAddr) << line;
 		}
 
-		socket.sendToSocket() << line;
+		socket.sendToSocket(recv.recvAddr) << line;
 	}
 }

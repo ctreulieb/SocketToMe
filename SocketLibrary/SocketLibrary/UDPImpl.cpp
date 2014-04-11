@@ -1,21 +1,7 @@
 #include <UDPpimpl.hpp>
 
-class UDPAddress {
-	friend class UDPSocketA::UDPimpl;
-private:
-	sockaddr address;
-public:
-	bool operator ==(const UDPAddress&) const;
-};
 
 
-class UDPResponse
-{
-public:
-	int n;
-	std::istringstream msg;
-	UDPAddress recvAddr;	
-};
 
 
 bool UDPAddress::operator==(const UDPAddress& addr ) const {
@@ -47,9 +33,9 @@ public:
 		response.n = n;
 		return response;
 	}
-	void sendToSocket(std::string msg, UDPAddress addr) {
-		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&addr.address, 
-			sizeof(addr.address)); 
+	void sendToSocket(std::string msg, sockaddr addr) {
+		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&addr, 
+			sizeof(addr)); 
 	}
 	void sendToSocket(std::string msg) {
 		sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&socketAddr, 
@@ -57,44 +43,12 @@ public:
 	}
 };
 
-template<typename T>
-inline std::ostream& operator << (UDPSocketA::SendStreamWrapper& e, T item) {
-	return e.stream() << item;
-}
-
-
-template<typename T>
-inline std::istream& operator >> (UDPResponse& e, T &item) {
-	return e.msg >> item;
-}
-
 
 UDPSocketA::UDPSocketA(std::string addr, int port) : pUdp_(new UDPimpl(addr, port) ) {}
 UDPSocketA::~UDPSocketA() { }
 UDPResponse& UDPSocketA::recvFromSocket(UDPResponse &response) {
 	return pUdp_->recvFromSocket(response);
 }
-
-class UDPSocketA::SendStreamWrapper {
-	UDPSocketA* pUDPimpl;
-	std::ostringstream oss;
-	UDPAddress addr;
-	bool specifiedAddr;
-	public:
-		SendStreamWrapper(UDPSocketA* p) : pUDPimpl(p) {
-			specifiedAddr = false;
-		}
-		SendStreamWrapper(UDPSocketA* p, UDPAddress a) : pUDPimpl(p), addr(a) {
-			specifiedAddr = true;
-		}
-		~SendStreamWrapper() {
-			if(specifiedAddr)
-				pUDPimpl->sendToSocketImpl(oss.str(),addr);
-			else
-				pUDPimpl->sendToSocketImpl(oss.str());
-		} 
-		inline std::ostringstream& stream() { return oss; }
-};
 
 UDPSocketA::SendStreamWrapper UDPSocketA::sendToSocket() {
 	return UDPSocketA::SendStreamWrapper(this);
@@ -109,8 +63,8 @@ void UDPSocketA::bindSocket() {
 }
 
 void UDPSocketA::sendToSocketImpl(std::string msg, UDPAddress addr){
-	pUdp_->sendToSocket(msg,addr);
+	pUdp_->sendToSocket(msg,addr.address);
 }
 void UDPSocketA::sendToSocketImpl(std::string msg) {
 	pUdp_->sendToSocket(msg);
-} 
+}
