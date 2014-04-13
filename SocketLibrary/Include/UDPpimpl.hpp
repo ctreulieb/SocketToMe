@@ -28,10 +28,10 @@ class UDPSocketA {
 	void sendToSocketImpl(std::string msg); 
 public:
 	class SendStreamWrapper {
-	UDPSocketA* pUDPimpl;
-	std::ostringstream oss;
-	UDPAddress addr;
-	bool specifiedAddr;
+		UDPSocketA* pUDPimpl;
+		std::ostringstream oss;
+		UDPAddress addr;
+		bool specifiedAddr;
 	public:
 		SendStreamWrapper(UDPSocketA* p); 
 		SendStreamWrapper(UDPSocketA* p, UDPAddress a);

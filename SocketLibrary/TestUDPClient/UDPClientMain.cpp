@@ -6,7 +6,7 @@ using namespace std;
 int main() {
 	UDPSocketA socket("127.0.1",49152);
 	string line;
-
+	//socket.~UDPSocketA();  destructor should it be public?
 	while(getline(cin,line)) {
 		UDPResponse recv;
 		socket.sendToSocket() << line;

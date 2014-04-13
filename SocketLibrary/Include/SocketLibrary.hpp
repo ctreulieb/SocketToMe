@@ -11,7 +11,8 @@
 #pragma comment (lib, "SocketLibrary-mt.lib")
 #endif
 //#include <UDP.hpp>
-#include <TCP.hpp>
+//#include <TCP.hpp>
+#include <TCPpimpl.hpp>
 #include <UDPpimpl.hpp>
 
 

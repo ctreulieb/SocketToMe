@@ -5,7 +5,7 @@
 using namespace std;
 
 int main(){
-	TCPSocket socket("127.0.1", 45153);
+	TCPSocketA socket("127.0.1", 45153);
 
 	bool success = socket.connectToSocket();
 	if(!success) {

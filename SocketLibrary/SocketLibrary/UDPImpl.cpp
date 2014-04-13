@@ -75,7 +75,7 @@ UDPSocketA::SendStreamWrapper UDPSocketA::sendToSocket() {
 UDPSocketA::SendStreamWrapper UDPSocketA::sendToSocket(UDPAddress addr) {
 	return UDPSocketA::SendStreamWrapper(this, addr);
 }
-
+//THESE REALLY SHOULD INDICATE SUCCESS OR FAILURE
 void UDPSocketA::bindSocket() {
 	pUdp_->bindSocket();
 }

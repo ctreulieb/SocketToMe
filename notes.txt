@@ -22,4 +22,6 @@ UDP
 		needs address and char*
 	recvfrom - use your own socket
 	
-	
+TCPConnection contains a SOCKET.
+
+Does it need a destructor then, to close the socket when we're done?
