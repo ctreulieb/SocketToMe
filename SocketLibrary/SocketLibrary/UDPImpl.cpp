@@ -30,10 +30,10 @@ public:
 		return response;
 	}
 	bool sendToSocket(std::string msg, sockaddr addr) {
-		return !(SOCKET_ERROR == sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&addr,	sizeof(addr))); 
+		return !(SOCKET_ERROR == sendto(hSocket,msg.c_str(),(int)msg.size(), 0,(sockaddr*)&addr,	sizeof(addr))); 
 	}
 	bool sendToSocket(std::string msg) {
-		return !(SOCKET_ERROR ==  sendto(hSocket,msg.c_str(),msg.size(), 0,(sockaddr*)&socketAddr, sizeof(socketAddr)));
+		return !(SOCKET_ERROR ==  sendto(hSocket,msg.c_str(),(int)msg.size(), 0,(sockaddr*)&socketAddr, sizeof(socketAddr)));
 	}
 };
 

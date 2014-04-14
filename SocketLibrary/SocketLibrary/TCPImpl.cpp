@@ -47,12 +47,12 @@ public:
 
 	void sendTo(std::string msg, TCPConnection conn)
 	{
-		send(conn.hAccepted, msg.c_str(),strlen(msg.c_str())+1,0);
+		send(conn.hAccepted, msg.c_str(),(int)strlen(msg.c_str())+1,0);
 	}
 
 	void sendTo(std::string msg)
 	{
-		send(hSocket, msg.c_str(),strlen(msg.c_str())+1,0);
+		send(hSocket, msg.c_str(),(int)strlen(msg.c_str())+1,0);
 	}
 };
 

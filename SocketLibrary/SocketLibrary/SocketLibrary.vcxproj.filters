@@ -21,9 +21,6 @@
     <ClCompile Include="Socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TCP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UDPImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

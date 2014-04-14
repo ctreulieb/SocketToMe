@@ -285,7 +285,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="TCP.cpp" />
     <ClCompile Include="TCPImpl.cpp" />
     <ClCompile Include="UDPImpl.cpp" />
   </ItemGroup>
