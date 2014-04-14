@@ -1,10 +1,10 @@
-#include <UDPpimpl.hpp>
+#include <UDPSocket.hpp>
 
 bool UDPAddress::operator==(const UDPAddress& addr ) const {
 	return (this->address.sa_data == addr.address.sa_data)&& (this->address.sa_family == addr.address.sa_family);
 }
 
-class UDPSocketA::UDPimpl : public CTSocket {
+class UDPSocket::UDPimpl : public CTSocket {
 	
 public:
 	UDPimpl(std::string addr, int port) : CTSocket(addr, port) {
@@ -38,15 +38,15 @@ public:
 };
 
 
-UDPSocketA::SendStreamWrapper::SendStreamWrapper(UDPSocketA* p, bool &r) : pUDPimpl(p), result(r) {
+UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, bool &r) : pUDPimpl(p), result(r) {
 	specifiedAddr = false;
 };
 
-UDPSocketA::SendStreamWrapper::SendStreamWrapper(UDPSocketA* p, bool &r, UDPAddress a) : pUDPimpl(p), addr(a), result(r) {
+UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, bool &r, UDPAddress a) : pUDPimpl(p), addr(a), result(r) {
 	specifiedAddr = true;
 }
 
-UDPSocketA::SendStreamWrapper::~SendStreamWrapper() {
+UDPSocket::SendStreamWrapper::~SendStreamWrapper() {
 
 	if(specifiedAddr)
 		result = pUDPimpl->sendToSocketImpl(oss.str(),addr);
@@ -55,30 +55,30 @@ UDPSocketA::SendStreamWrapper::~SendStreamWrapper() {
 }
 
 
-std::ostringstream& UDPSocketA::SendStreamWrapper::stream() { return oss; }
+std::ostringstream& UDPSocket::SendStreamWrapper::stream() { return oss; }
 
-UDPSocketA::UDPSocketA(std::string addr, int port) : pUdp_(new UDPimpl(addr, port) ) {}
-UDPSocketA::~UDPSocketA() { }
-UDPResponse& UDPSocketA::recvFromSocket(UDPResponse &response) {
+UDPSocket::UDPSocket(std::string addr, int port) : pUdp_(new UDPimpl(addr, port) ) {}
+UDPSocket::~UDPSocket() { }
+UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response) {
 	return pUdp_->recvFromSocket(response);
 }
 
-UDPSocketA::SendStreamWrapper UDPSocketA::sendToSocket(bool result) {
-	return UDPSocketA::SendStreamWrapper(this, result);
+UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool result) {
+	return UDPSocket::SendStreamWrapper(this, result);
 }
 
-UDPSocketA::SendStreamWrapper UDPSocketA::sendToSocket(bool result, UDPAddress addr) {
-	return UDPSocketA::SendStreamWrapper(this, result, addr);
+UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool result, UDPAddress addr) {
+	return UDPSocket::SendStreamWrapper(this, result, addr);
 }
 
 
-bool UDPSocketA::bindSocket() {
+bool UDPSocket::bindSocket() {
 	return pUdp_->bindSocket();
 }
 
-bool UDPSocketA::sendToSocketImpl(std::string msg, UDPAddress addr){
+bool UDPSocket::sendToSocketImpl(std::string msg, UDPAddress addr){
 	return pUdp_->sendToSocket(msg,addr.address);
 }
-bool UDPSocketA::sendToSocketImpl(std::string msg) {
+bool UDPSocket::sendToSocketImpl(std::string msg) {
 	return pUdp_->sendToSocket(msg);
 }

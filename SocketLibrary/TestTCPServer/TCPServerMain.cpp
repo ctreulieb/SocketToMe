@@ -3,7 +3,7 @@
 #include<string>
 using namespace std;
 int main(){
-	TCPSocketA socket("127.0.1", 45153);
+	TCPSocket socket("127.0.1", 45153);
 	bool result = socket.bindSocket();
 	if(!result) {
 		cout << "bind() failed";

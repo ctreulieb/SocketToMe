@@ -4,7 +4,7 @@
 
 
 class UDPAddress {
-	friend class UDPSocketA;
+	friend class UDPSocket;
 private:
 	sockaddr address;
 public:
@@ -21,26 +21,26 @@ public:
 };
 
 
-class UDPSocketA {
+class UDPSocket {
 	class UDPimpl;
 	std::unique_ptr<UDPimpl> pUdp_;
 	bool sendToSocketImpl(std::string msg, UDPAddress);
 	bool sendToSocketImpl(std::string msg); 
 public:
 	class SendStreamWrapper {
-		UDPSocketA* pUDPimpl;
+		UDPSocket* pUDPimpl;
 		std::ostringstream oss;
 		UDPAddress addr;
 		bool specifiedAddr;
 		bool &result;
 	public:
-		SendStreamWrapper(UDPSocketA* p,bool &r); 
-		SendStreamWrapper(UDPSocketA* p,bool &r, UDPAddress a);
+		SendStreamWrapper(UDPSocket* p,bool &r); 
+		SendStreamWrapper(UDPSocket* p,bool &r, UDPAddress a);
 		~SendStreamWrapper();
 		std::ostringstream& stream();
 	};
-	UDPSocketA(std::string addr, int port);
-	virtual ~UDPSocketA();
+	UDPSocket(std::string addr, int port);
+	virtual ~UDPSocket();
 	UDPResponse& recvFromSocket(UDPResponse &response);
 	SendStreamWrapper sendToSocket(bool);
 	SendStreamWrapper sendToSocket(bool, UDPAddress addr);
@@ -49,7 +49,7 @@ public:
 
 
 template<typename T>
-inline std::ostream& operator << (UDPSocketA::SendStreamWrapper& e, T item) {
+inline std::ostream& operator << (UDPSocket::SendStreamWrapper& e, T item) {
 	return e.stream() << item;
 }
 

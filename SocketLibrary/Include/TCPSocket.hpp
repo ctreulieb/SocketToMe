@@ -3,7 +3,7 @@
 #include <Socket.hpp>
 
 class TCPConnection {
-	friend class TCPSocketA;
+	friend class TCPSocket;
 private:
 	SOCKET hAccepted;
 };
@@ -13,7 +13,7 @@ struct TCPResponse{
 	int n;
 };
 
-class TCPSocketA {
+class TCPSocket {
 	class TCPimpl;
 	std::unique_ptr<TCPimpl> pTcp_;
 	void sendToImpl(std::string msg, TCPConnection conn);
@@ -21,18 +21,18 @@ class TCPSocketA {
 public:
 	class SendStreamWrapper {
 		std::ostringstream oss;
-		TCPSocketA* pTCPSocket;
+		TCPSocket* pTCPSocket;
 		TCPConnection recipient;
 		bool specifiedAddr;
 	public:
-		SendStreamWrapper(TCPSocketA* p);
-		SendStreamWrapper(TCPSocketA* p, TCPConnection conn);
+		SendStreamWrapper(TCPSocket* p);
+		SendStreamWrapper(TCPSocket* p, TCPConnection conn);
 		~SendStreamWrapper();
 
 		inline std::ostringstream& stream() { return oss; }
 	};
-	TCPSocketA(std::string addr, int port);
-	~TCPSocketA();
+	TCPSocket(std::string addr, int port);
+	~TCPSocket();
 	bool startListen();
 	bool connectToSocket();
 	TCPConnection acceptConnection();
@@ -44,7 +44,7 @@ public:
 };
 
 template<typename T>
-inline std::ostream& operator << (TCPSocketA::SendStreamWrapper& e, T item) {
+inline std::ostream& operator << (TCPSocket::SendStreamWrapper& e, T item) {
 	return e.stream() << item;
 }
 

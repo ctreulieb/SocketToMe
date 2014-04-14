@@ -1,6 +1,6 @@
-#include <TCPpimpl.hpp>
+#include <TCPSocket.hpp>
 
-class TCPSocketA::TCPimpl : public CTSocket 
+class TCPSocket::TCPimpl : public CTSocket 
 {
 public:
 	TCPimpl(std::string addr, int port) : CTSocket(addr, port) 
@@ -56,44 +56,44 @@ public:
 	}
 };
 
-TCPSocketA::TCPSocketA(std::string addr, int port) : pTcp_(new TCPimpl(addr, port)) { }
-TCPSocketA::~TCPSocketA() { }
+TCPSocket::TCPSocket(std::string addr, int port) : pTcp_(new TCPimpl(addr, port)) { }
+TCPSocket::~TCPSocket() { }
 
-bool TCPSocketA::startListen()
+bool TCPSocket::startListen()
 {
 	return pTcp_->startListen();
 }
 
-bool TCPSocketA::connectToSocket()
+bool TCPSocket::connectToSocket()
 {
 	return pTcp_->connectToSocket();
 }
 
-TCPConnection TCPSocketA::acceptConnection()
+TCPConnection TCPSocket::acceptConnection()
 {
 	return pTcp_->acceptConnection();
 }
 
-TCPResponse& TCPSocketA::recvFrom(TCPResponse &response, TCPConnection conn)
+TCPResponse& TCPSocket::recvFrom(TCPResponse &response, TCPConnection conn)
 {
 	return pTcp_->recvFrom(response, conn);
 }
-TCPResponse& TCPSocketA::recvFrom(TCPResponse &response)
+TCPResponse& TCPSocket::recvFrom(TCPResponse &response)
 {
 	return pTcp_->recvFrom(response);
 }
 
-TCPSocketA::SendStreamWrapper TCPSocketA::sendTo() 
+TCPSocket::SendStreamWrapper TCPSocket::sendTo() 
 {
-	return TCPSocketA::SendStreamWrapper(this);
+	return TCPSocket::SendStreamWrapper(this);
 }
 
-TCPSocketA::SendStreamWrapper TCPSocketA::sendTo(TCPConnection addr) 
+TCPSocket::SendStreamWrapper TCPSocket::sendTo(TCPConnection addr) 
 {
-	return TCPSocketA::SendStreamWrapper(this, addr);
+	return TCPSocket::SendStreamWrapper(this, addr);
 }
 
-TCPSocketA::SendStreamWrapper::~SendStreamWrapper()
+TCPSocket::SendStreamWrapper::~SendStreamWrapper()
 {
 	if(specifiedAddr)
 		pTCPSocket->sendToImpl(oss.str(), recipient);
@@ -101,27 +101,27 @@ TCPSocketA::SendStreamWrapper::~SendStreamWrapper()
 		pTCPSocket->sendToImpl(oss.str());
 }
 
-TCPSocketA::SendStreamWrapper::SendStreamWrapper(TCPSocketA* p, TCPConnection conn): pTCPSocket(p), recipient(conn)
+TCPSocket::SendStreamWrapper::SendStreamWrapper(TCPSocket* p, TCPConnection conn): pTCPSocket(p), recipient(conn)
 {
 	specifiedAddr = true;
 }
 
-TCPSocketA::SendStreamWrapper::SendStreamWrapper(TCPSocketA* p): pTCPSocket(p)
+TCPSocket::SendStreamWrapper::SendStreamWrapper(TCPSocket* p): pTCPSocket(p)
 {
 	specifiedAddr = false;
 }
 
-bool TCPSocketA::bindSocket() 
+bool TCPSocket::bindSocket() 
 {
 	return pTcp_->bindSocket();
 }
 
-void TCPSocketA::sendToImpl(std::string msg, TCPConnection conn)
+void TCPSocket::sendToImpl(std::string msg, TCPConnection conn)
 {
 	pTcp_->sendTo(msg,conn);
 }
 
-void TCPSocketA::sendToImpl(std::string msg)
+void TCPSocket::sendToImpl(std::string msg)
 {
 	pTcp_->sendTo(msg);
 }
