@@ -32,18 +32,18 @@ public:
 		std::ostringstream oss;
 		UDPAddress addr;
 		bool specifiedAddr;
-		bool &result;
+		bool& result;
 	public:
-		SendStreamWrapper(UDPSocketA* p,bool &r); 
-		SendStreamWrapper(UDPSocketA* p,bool &r, UDPAddress a);
+		SendStreamWrapper(UDPSocketA* p,bool& r); 
+		SendStreamWrapper(UDPSocketA* p,bool& r, UDPAddress a);
 		~SendStreamWrapper();
 		std::ostringstream& stream();
 	};
 	UDPSocketA(std::string addr, int port);
 	virtual ~UDPSocketA();
 	UDPResponse& recvFromSocket(UDPResponse &response);
-	SendStreamWrapper sendToSocket(bool);
-	SendStreamWrapper sendToSocket(bool, UDPAddress addr);
+	SendStreamWrapper sendToSocket(bool&);
+	SendStreamWrapper sendToSocket(bool&, UDPAddress addr);
 	bool bindSocket();
 };
 
