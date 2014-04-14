@@ -30,7 +30,7 @@ public:
 	}
 	TCPResponse& recvFrom(TCPResponse &response)
 	{
-		int const MAX_LINE= 500;
+		int const MAX_LINE= 8000;
 		char msg[MAX_LINE];
 		response.n = recv(hSocket, msg,MAX_LINE,0);
 		response.msg = std::istringstream(msg);
@@ -38,7 +38,7 @@ public:
 	}
 	TCPResponse& recvFrom(TCPResponse &response, TCPConnection conn)
 	{
-		int const MAX_LINE= 500;
+		int const MAX_LINE= 8000;
 		char msg[MAX_LINE];
 		response.n = recv(conn.hAccepted, msg,MAX_LINE,0);
 		response.msg = std::istringstream(msg);

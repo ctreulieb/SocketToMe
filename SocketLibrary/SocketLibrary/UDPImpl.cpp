@@ -18,7 +18,7 @@ public:
 		sockaddr clientAddress;
 		socklen_t cbClientAddress = sizeof(clientAddress);
 
-		int const MAX_LINE = 500;
+		int const MAX_LINE = 8000;
 		char msg[MAX_LINE];
 		int n = recvfrom(hSocket, msg, MAX_LINE, 0, &clientAddress, &cbClientAddress);
 		msg[min(n,499)]=0;
@@ -38,11 +38,11 @@ public:
 };
 
 
-UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, bool &r) : pUDPimpl(p), result(r) {
+UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, bool& r) : pUDPimpl(p), result(r) {
 	specifiedAddr = false;
-};
+}
 
-UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, bool &r, UDPAddress a) : pUDPimpl(p), addr(a), result(r) {
+UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, bool& r, UDPAddress a) : pUDPimpl(p), addr(a), result(r) {
 	specifiedAddr = true;
 }
 
@@ -63,11 +63,11 @@ UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response) {
 	return pUdp_->recvFromSocket(response);
 }
 
-UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool result) {
+UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool& result) {
 	return UDPSocket::SendStreamWrapper(this, result);
 }
 
-UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool result, UDPAddress addr) {
+UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool& result, UDPAddress addr) {
 	return UDPSocket::SendStreamWrapper(this, result, addr);
 }
 
