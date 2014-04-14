@@ -20,12 +20,16 @@ int main() {
 		while(recv.msg >> line) {
 			cout <<" " <<line;
 		}
+		bool result =false;
 		cout << endl;
 		if(line == "!quit") {
 			string const terminateMsg = "server exit";
-			socket.sendToSocket(recv.recvAddr) << line;
+			
+			socket.sendToSocket(result, recv.recvAddr) << line;
 		}
-
-		socket.sendToSocket(recv.recvAddr) << line;
+		socket.sendToSocket(result,recv.recvAddr) << line;
+		if(!result) {
+			cout << "Some Error or shit" << endl;
+		}
 	}
 }

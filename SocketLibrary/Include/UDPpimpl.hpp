@@ -24,26 +24,27 @@ public:
 class UDPSocketA {
 	class UDPimpl;
 	std::unique_ptr<UDPimpl> pUdp_;
-	void sendToSocketImpl(std::string msg, UDPAddress);
-	void sendToSocketImpl(std::string msg); 
+	bool sendToSocketImpl(std::string msg, UDPAddress);
+	bool sendToSocketImpl(std::string msg); 
 public:
 	class SendStreamWrapper {
 		UDPSocketA* pUDPimpl;
 		std::ostringstream oss;
 		UDPAddress addr;
 		bool specifiedAddr;
+		bool &result;
 	public:
-		SendStreamWrapper(UDPSocketA* p); 
-		SendStreamWrapper(UDPSocketA* p, UDPAddress a);
+		SendStreamWrapper(UDPSocketA* p,bool &r); 
+		SendStreamWrapper(UDPSocketA* p,bool &r, UDPAddress a);
 		~SendStreamWrapper();
 		std::ostringstream& stream();
 	};
 	UDPSocketA(std::string addr, int port);
 	virtual ~UDPSocketA();
 	UDPResponse& recvFromSocket(UDPResponse &response);
-	SendStreamWrapper sendToSocket();
-	SendStreamWrapper sendToSocket(UDPAddress addr);
-	void bindSocket();
+	SendStreamWrapper sendToSocket(bool);
+	SendStreamWrapper sendToSocket(bool, UDPAddress addr);
+	bool bindSocket();
 };
 
 

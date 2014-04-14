@@ -9,8 +9,10 @@ int main() {
 	//socket.~UDPSocketA();  destructor should it be public?
 	while(getline(cin,line)) {
 		UDPResponse recv;
-		socket.sendToSocket() << line;
-		
+		bool result = false;
+		socket.sendToSocket(result) << line;
+		if(!result)
+			cout << "some error or some shit " << endl;
 		socket.recvFromSocket(recv) >> line;
 		if(recv.n==-1) {
 			cout << "no reply" << endl;
