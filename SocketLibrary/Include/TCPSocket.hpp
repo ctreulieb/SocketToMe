@@ -15,7 +15,7 @@ struct TCPResponse{
 
 class TCPSocket {
 	class TCPimpl;
-	std::unique_ptr<TCPimpl> pTcp_;
+	std::shared_ptr<TCPimpl> pTcp_;
 	void sendToImpl(std::string msg, TCPConnection conn);
 	void sendToImpl(std::string msg);
 public:
