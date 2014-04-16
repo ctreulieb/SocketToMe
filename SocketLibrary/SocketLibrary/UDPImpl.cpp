@@ -52,7 +52,9 @@ public:
 	}
 };
 
-
+int UDPSocket::getWSAErrorCode() {
+	return pUdp_->getWSAErrorCode();
+}
 UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, bool& r) : pUDPimpl(p), result(r) {
 	specifiedAddr = false;
 }

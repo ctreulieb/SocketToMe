@@ -23,7 +23,7 @@ void constRecv(UDPSocket& socket) {
 	while(!done) {
 		string line;
 		UDPResponse recv;
-		socket.recvFromSocket(recv) >> line;
+		socket.recvFromSocket(recv) >> line; //look into a timeout here
 		//check to see if its a new client
 		bool newClient = true;
 		ClientInfo currentClient;
@@ -37,6 +37,7 @@ void constRecv(UDPSocket& socket) {
 			ClientInfo Ci(line,recv.recvAddr);
 			addrBook.push_back(Ci);
 			currentClient = Ci;
+			cout << "new dude: " << line << endl;
 		}
 
 		
@@ -54,7 +55,14 @@ void constRecv(UDPSocket& socket) {
 int main() {
 
 	UDPSocket socket("127.0.1",49152);
-	socket.bindSocket();
+	if(socket.bindSocket())
+	{
+		cout << "bind good" << endl;
+	}else
+	{cout << "bind bad" << endl;
+		cout << socket.getWSAErrorCode() << endl;
+		return -1;
+	}
 
 	thread t(constRecv, ref(socket));
 
@@ -62,6 +70,7 @@ int main() {
 	while(getline(cin,line)) {
 		if(line == "quit") {
 			done = true;
+			//Inform clients that server is going down
 			t.join();
 			return 0;
 		}

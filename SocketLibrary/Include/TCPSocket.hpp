@@ -41,6 +41,7 @@ public:
 	TCPResponse& recvFrom(TCPResponse &response, TCPConnection conn);
 	TCPResponse& recvFrom(TCPResponse &response);
 	bool bindSocket();
+	int getWSAErrorCode();
 };
 
 template<typename T>

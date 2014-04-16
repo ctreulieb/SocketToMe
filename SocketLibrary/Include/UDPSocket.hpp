@@ -46,6 +46,7 @@ public:
 	SendStreamWrapper sendToSocket(bool&);
 	SendStreamWrapper sendToSocket(bool&, UDPAddress addr);
 	bool bindSocket();
+	int getWSAErrorCode();
 };
 
 

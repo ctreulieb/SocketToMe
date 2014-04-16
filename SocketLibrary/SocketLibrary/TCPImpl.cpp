@@ -126,3 +126,8 @@ void TCPSocket::sendToImpl(std::string msg)
 {
 	pTcp_->sendTo(msg);
 }
+
+int TCPSocket::getWSAErrorCode()
+{
+	return pTcp_->getWSAErrorCode();
+}
