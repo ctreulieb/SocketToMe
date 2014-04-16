@@ -5,9 +5,6 @@ CTSocket::CTSocket(std::string addr, int port)
 	WSADATA wsaData;
 	int exitCode = EXIT_SUCCESS;
 	int iResult = WSAStartup(MAKEWORD(2,2),&wsaData);
-	if(iResult != NO_ERROR) {
-		//TODO: pick something to do when shit gets fucked
-	}
 };
 
 CTSocket::~CTSocket()
