@@ -4,6 +4,7 @@
 #include<process.h>
 #include<windows.h>
 #include<thread>
+#include<regex>
 
 using namespace std;
 
@@ -39,22 +40,49 @@ void constRecv(UDPSocket& socket) {
 			currentClient = Ci;
 			cout << "new dude: " << line << endl;
 		}
-
-		
-		for(unsigned i = 0; i < addrBook.size(); ++i) {
-			bool success = true;
-			if(addrBook[i].addr != recv.recvAddr)
-				socket.sendToSocket(success, addrBook[i].addr) << currentClient.tag + ": " + recv.msg.str();
-			if(!success)
-				cout << "error sending message to client " + i << endl;
-		}
+		else
+			for(unsigned i = 0; i < addrBook.size(); ++i) {
+				bool success = true;
+				if(addrBook[i].addr != recv.recvAddr)
+					socket.sendToSocket(success, addrBook[i].addr) << currentClient.tag + ": " + recv.msg.str();
+				if(!success)
+					cout << "error sending message to client " + i << endl;
+			}
 	}
 }
-
+regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+regex localHostReg("(L|l)ocal(H|h)ost");
 
 int main() {
+	cout << "C Treulieb, T Garrow  SocketMessangerServer 2014" << endl << endl;
+	cout << "---------------- Configuration ----------------" << endl;
+	bool valid = false;
+	string address;
+	do {
+		cout << "IP Address :";
 
-	UDPSocket socket("127.0.1",49152);
+		cin >> address;	
+		if(regex_match(address,ipReg)) {
+			valid = true;
+		} else if(regex_match(address, localHostReg)){
+			valid = true;
+			address = "127.0.1";
+		} else{
+			cout << "IP not Valid" << endl;
+		}
+	}while(!valid);
+	valid = false;
+	int port;
+	do {
+		cout << "Port Number (> 1024): ";
+		cin >> port;
+		if(port > 1024) {
+			valid = true;
+		}
+
+	}while(!valid);
+
+	UDPSocket socket(address,port);
 	if(socket.bindSocket())
 	{
 		cout << "bind good" << endl;
@@ -68,7 +96,7 @@ int main() {
 
 	string line;
 	while(getline(cin,line)) {
-		if(line == "quit") {
+		if(line == "/quit") {
 			done = true;
 			//Inform clients that server is going down
 			t.join();
