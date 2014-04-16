@@ -25,3 +25,5 @@ UDP
 TCPConnection contains a SOCKET.
 
 Does it need a destructor then, to close the socket when we're done?
+
+44 byte leak in VS2012 multi-threaded app - prob fine.
