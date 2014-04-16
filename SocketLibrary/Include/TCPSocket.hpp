@@ -4,11 +4,8 @@
 
 class TCPConnection {
 	friend class TCPSocket;
-	class TCPConnectionImpl;
-public:
-	~TCPConnection();
-private:	
-	std::shared_ptr<TCPConnectionImpl> pTcpConn_;
+private:
+	SOCKET hAccepted;
 };
 
 struct TCPResponse{
@@ -18,7 +15,7 @@ struct TCPResponse{
 
 class TCPSocket {
 	class TCPimpl;
-	std::unique_ptr<TCPimpl> pTcp_;
+	std::shared_ptr<TCPimpl> pTcp_;
 	void sendToImpl(std::string msg, TCPConnection conn);
 	void sendToImpl(std::string msg);
 public:
