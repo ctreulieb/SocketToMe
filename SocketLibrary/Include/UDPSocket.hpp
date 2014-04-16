@@ -9,6 +9,7 @@ private:
 	sockaddr address;
 public:
 	bool operator == (UDPAddress);
+	bool operator != (UDPAddress);
 };
 
 

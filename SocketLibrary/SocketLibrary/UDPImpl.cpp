@@ -8,6 +8,14 @@ bool UDPAddress::operator==( UDPAddress addr ) {
 	return ((std::string) leftCharAddres  == (std::string) rightCharAddress);
 }
 
+bool UDPAddress::operator!=( UDPAddress addr ) {
+	char leftCharAddres[INET_ADDRSTRLEN], rightCharAddress[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &(this->address.sa_data), leftCharAddres, INET_ADDRSTRLEN);
+	inet_ntop(AF_INET, addr.address.sa_data, rightCharAddress, INET_ADDRSTRLEN);
+
+	return ((std::string) leftCharAddres  != (std::string) rightCharAddress);
+}
+
 class UDPSocket::UDPimpl : public CTSocket {
 	
 public:
