@@ -8,7 +8,7 @@ class UDPAddress {
 private:
 	sockaddr address;
 public:
-	bool operator == (const UDPAddress&) const;
+	bool operator == (UDPAddress);
 };
 
 

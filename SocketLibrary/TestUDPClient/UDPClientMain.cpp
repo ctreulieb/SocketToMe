@@ -1,29 +1,30 @@
 #include<SocketLibrary.hpp>
 #include<iostream>
 #include<string>
+#include<process.h>
+#include<windows.h>
+#include<thread>
 using namespace std;
+
+bool done;
+
+void constRecv(UDPSocket &socket) {
+	while(!done) {
+		string line;
+		UDPResponse recv;
+		socket.recvFromSocket(recv);
+		cout << recv.msg.str() << endl;
+	}
+}
+
 
 int main() {
 	UDPSocket socket("127.0.1",49152);
-	string line;
-	//socket.~UDPSocket();  destructor should it be public?
-	while(getline(cin,line)) {
-		UDPResponse recv;
-		bool result = false;
-		socket.sendToSocket(result) << line;
-		if(!result)
-			cout << "some error or some shit " << endl;
-		socket.recvFromSocket(recv) >> line;
-		if(recv.n==-1) {
-			cout << "no reply" << endl;
-		} else {
-			string const terminateMsg = "server exit";
-			//string msg = recv.msg;
-			if(line ==terminateMsg) {
-				cout << "Server terminated" << endl;
-				break;
-			}
-			cout << recv.n << ":" << line << endl; 
-		}
+	string line = "";
+	bool success;
+	socket.sendToSocket(success) << "name";
+	thread t(constRecv, ref(socket));
+	while(getline(cin,line)) {	
+		socket.sendToSocket(success) << line;
 	}
 }

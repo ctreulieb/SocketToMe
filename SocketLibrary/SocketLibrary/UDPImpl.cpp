@@ -1,7 +1,11 @@
 #include <UDPSocket.hpp>
 
-bool UDPAddress::operator==(const UDPAddress& addr ) const {
-	return (this->address.sa_data == addr.address.sa_data)&& (this->address.sa_family == addr.address.sa_family);
+bool UDPAddress::operator==( UDPAddress addr ) {
+	char leftCharAddres[INET_ADDRSTRLEN], rightCharAddress[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &(this->address.sa_data), leftCharAddres, INET_ADDRSTRLEN);
+	inet_ntop(AF_INET, addr.address.sa_data, rightCharAddress, INET_ADDRSTRLEN);
+
+	return ((std::string) leftCharAddres  == (std::string) rightCharAddress);
 }
 
 class UDPSocket::UDPimpl : public CTSocket {
@@ -19,9 +23,12 @@ public:
 		socklen_t cbClientAddress = sizeof(clientAddress);
 
 		int const MAX_LINE = 8000;
-		char msg[MAX_LINE];
+		char msg[MAX_LINE + 1];
 		int n = recvfrom(hSocket, msg, MAX_LINE, 0, &clientAddress, &cbClientAddress);
-		msg[min(n,499)]=0;
+		if( n != -1)
+			msg[min(n,7999)]=0;
+		else
+			msg[0] = 0;
 		UDPAddress addr;
 		response.msg = std::istringstream(msg); 
 		addr.address = clientAddress;

@@ -36,6 +36,7 @@ public:
 		response.msg = std::istringstream(msg);
 		return response;
 	}
+
 	TCPResponse& recvFrom(TCPResponse &response, TCPConnection conn)
 	{
 		int const MAX_LINE= 8000;

@@ -12,26 +12,26 @@ bool done = false;
 
 CriticalSection clintCS; 
 vector<TCPConnection> clients;
-
+vector<thread> threads;
 
 void recvClient(TCPSocket& socket, TCPConnection& client) {
 	while(!done) {
 		string line;
 		TCPResponse response;
-		socket.recvFrom(response,client)  >> line;
+		socket.recvFrom(response,client);
+		line = response.msg.str();
 		cout << "Recv: " << line << endl;
 		{
+			CSLock d(clintCS);
 			for(unsigned i = 0; i < clients.size(); i++) {
 				socket.sendTo(clients[i]) << line;
 			}
-			CSLock d(clintCS);
 		}
 	}
 }
 
 
 void accecptConnections(TCPSocket& socket) {
-	vector<thread> threads;
 	while(!done) {
 		TCPConnection client = socket.acceptConnection();
 		cout << "client connected" <<endl;
@@ -54,12 +54,12 @@ int main(){
 		cout << "Listen() failed";
 	}
 	thread t(accecptConnections,ref(socket));
-	
-	while(clients.empty()) {}
+
 	string line;
 	while(getline(cin,line)) {
 		if(line == "quit") {
 			done = true;
+			t.join();
 		}
 	}
 

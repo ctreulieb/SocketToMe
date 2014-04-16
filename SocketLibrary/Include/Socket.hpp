@@ -12,9 +12,9 @@ public:
 	CTSocket(std::string addr, int port);
 	~CTSocket();
 	bool bindSocket();
+	int getWSAErrorCode();
 protected:
 	SOCKET hSocket;
-	int getWSAErrorCode();
 	sockaddr_in socketAddr;
 };
 
