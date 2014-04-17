@@ -24,7 +24,7 @@ public:
 
 class UDPSocket {
 	class UDPimpl;
-	std::unique_ptr<UDPimpl> pUdp_;
+	std::shared_ptr<UDPimpl> pUdp_;
 	bool sendToSocketImpl(std::string msg, UDPAddress);
 	bool sendToSocketImpl(std::string msg); 
 public:
