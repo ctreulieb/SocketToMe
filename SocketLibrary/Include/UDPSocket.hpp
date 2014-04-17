@@ -18,7 +18,8 @@ class UDPResponse
 public:
 	int n;
 	std::istringstream msg;
-	UDPAddress recvAddr;	
+	UDPAddress recvAddr;
+	bool timeout;
 };
 
 
@@ -43,6 +44,7 @@ public:
 	UDPSocket(std::string addr, int port);
 	virtual ~UDPSocket();
 	UDPResponse& recvFromSocket(UDPResponse &response);
+	UDPResponse& recvFromSocket(UDPResponse &response, int timeout);
 	SendStreamWrapper sendToSocket(bool&);
 	SendStreamWrapper sendToSocket(bool&, UDPAddress addr);
 	bool bindSocket();

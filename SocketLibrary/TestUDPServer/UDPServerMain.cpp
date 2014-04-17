@@ -17,6 +17,10 @@ public:
 	ClientInfo() {}
 };
 
+bool operator == (ClientInfo lhs, ClientInfo rhs) {
+	return (lhs.addr == rhs.addr) && (lhs.tag == rhs.tag);
+}
+
 vector<ClientInfo> addrBook;
 
 void constRecv(UDPSocket& socket) {
@@ -24,7 +28,11 @@ void constRecv(UDPSocket& socket) {
 	while(!done) {
 		string line;
 		UDPResponse recv;
-		socket.recvFromSocket(recv) >> line; //look into a timeout here
+		socket.recvFromSocket(recv, 10) >> line; 
+		if(recv.timeout || line == "") {
+			continue;
+		}
+
 		//check to see if its a new client
 		bool newClient = true;
 		ClientInfo currentClient;
@@ -36,18 +44,34 @@ void constRecv(UDPSocket& socket) {
 		}
 		if(newClient) {
 			ClientInfo Ci(line,recv.recvAddr);
-			addrBook.push_back(Ci);
-			currentClient = Ci;
-			cout << "new dude: " << line << endl;
-		}
-		else
 			for(unsigned i = 0; i < addrBook.size(); ++i) {
 				bool success = true;
-				if(addrBook[i].addr != recv.recvAddr)
-					socket.sendToSocket(success, addrBook[i].addr) << currentClient.tag + ": " + recv.msg.str();
+					socket.sendToSocket(success, addrBook[i].addr) << Ci.tag << " has connected";
 				if(!success)
-					cout << "error sending message to client " + i << endl;
+					cout << "error sending message to client " << currentClient.tag  << endl;
 			}
+			addrBook.push_back(Ci);
+			currentClient = Ci;
+			cout << "New Client: " << line << endl;
+		} else {
+			if(line == "/quit") {
+				auto itrErasePos = find(addrBook.begin(), addrBook.end(), currentClient);
+				addrBook.erase(itrErasePos);
+				for(unsigned i = 0; i < addrBook.size(); ++i) {
+					bool success = true;
+						socket.sendToSocket(success, addrBook[i].addr) << currentClient.tag << " has disconnected";
+					if(!success)
+						cout << "error sending message to client " << currentClient.tag  << endl;
+				}
+			} else
+				for(unsigned i = 0; i < addrBook.size(); ++i) {
+					bool success = true;
+					if(addrBook[i].addr != recv.recvAddr)
+						socket.sendToSocket(success, addrBook[i].addr) << currentClient.tag << ": " << recv.msg.str();
+					if(!success)
+						cout << "error sending message to client " << i << endl;
+				}
+		}
 	}
 }
 regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
@@ -85,10 +109,10 @@ int main() {
 	UDPSocket socket(address,port);
 	if(socket.bindSocket())
 	{
-		cout << "bind good" << endl;
+		cout << "Connection bound." << endl;
 	}else
-	{cout << "bind bad" << endl;
-		cout << socket.getWSAErrorCode() << endl;
+	{
+		cout << "Failed to bind connetion error code: " << socket.getWSAErrorCode() << endl;
 		return -1;
 	}
 
@@ -98,7 +122,11 @@ int main() {
 	while(getline(cin,line)) {
 		if(line == "/quit") {
 			done = true;
-			//Inform clients that server is going down
+			for(unsigned i = 0; i < addrBook.size(); ++i)  {
+				bool success = true;
+				socket.sendToSocket(success, addrBook[i].addr) << "Server is shutting down!";
+			}
+
 			t.join();
 			return 0;
 		}
