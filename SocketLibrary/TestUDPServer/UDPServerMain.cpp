@@ -24,7 +24,11 @@ void constRecv(UDPSocket& socket) {
 	while(!done) {
 		string line;
 		UDPResponse recv;
-		socket.recvFromSocket(recv) >> line; //look into a timeout here
+		socket.recvFromSocket(recv, 10) >> line; //look into a timeout here
+		if(recv.timeout) {
+			continue;
+			cout << "t";
+		}
 		//check to see if its a new client
 		bool newClient = true;
 		ClientInfo currentClient;
@@ -85,10 +89,10 @@ int main() {
 	UDPSocket socket(address,port);
 	if(socket.bindSocket())
 	{
-		cout << "bind good" << endl;
+		cout << "Connection bound." << endl;
 	}else
-	{cout << "bind bad" << endl;
-		cout << socket.getWSAErrorCode() << endl;
+	{
+		cout << "Failed to bind connetion error code: " << socket.getWSAErrorCode() << endl;
 		return -1;
 	}
 
@@ -98,7 +102,11 @@ int main() {
 	while(getline(cin,line)) {
 		if(line == "/quit") {
 			done = true;
-			//Inform clients that server is going down
+			for(unsigned i = 0; i < addrBook.size(); ++i)  {
+				bool success = true;
+				socket.sendToSocket(success, addrBook[i].addr) << "Server is shutting down!";
+			}
+
 			t.join();
 			return 0;
 		}

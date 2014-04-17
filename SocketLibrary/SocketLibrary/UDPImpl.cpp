@@ -44,6 +44,48 @@ public:
 		response.n = n;
 		return response;
 	}
+
+	UDPResponse& recvFromSocket(UDPResponse &response, int timout) {
+		sockaddr clientAddress;
+		socklen_t cbClientAddress = sizeof(clientAddress);
+
+		int const MAX_LINE = 8000;
+		char msg[MAX_LINE + 1];
+
+
+		fd_set fds ;
+		int n ;
+		struct timeval tv ;
+
+		// Set up the file descriptor set.
+		FD_ZERO(&fds) ;
+		FD_SET(hSocket, &fds) ;
+
+		// Set up the struct timeval for the timeout.
+		tv.tv_sec = timout;
+		tv.tv_usec = 0 ;
+
+		// Wait until timeout or data received.
+		n = select ( (int)hSocket, &fds, NULL, NULL, &tv );
+
+		if(n != 0) {
+			n = recvfrom(hSocket, msg, MAX_LINE, 0, &clientAddress, &cbClientAddress);
+			if( n != -1)
+				msg[min(n,7999)]=0;
+			else
+				msg[0] = 0;
+			UDPAddress addr;
+			response.msg = std::istringstream(msg); 
+			addr.address = clientAddress;
+			response.recvAddr = addr;
+			response.n = n;
+			response.timeout = false;
+		} else {
+			response.timeout = true;
+		}
+
+		return response;
+	}
 	bool sendToSocket(std::string msg, sockaddr addr) {
 		return !(SOCKET_ERROR == sendto(hSocket,msg.c_str(),(int)msg.size(), 0,(sockaddr*)&addr,	sizeof(addr))); 
 	}
@@ -78,6 +120,9 @@ UDPSocket::UDPSocket(std::string addr, int port) : pUdp_(new UDPimpl(addr, port)
 UDPSocket::~UDPSocket() { }
 UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response) {
 	return pUdp_->recvFromSocket(response);
+}
+UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response, int timeout) {
+	return pUdp_->recvFromSocket(response, timeout);
 }
 
 UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool& result) {
