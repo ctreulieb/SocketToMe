@@ -22,7 +22,7 @@ void constRecv(UDPSocket &socket) {
 
 
 int main() {
-	cout << "C Treulieb, T Garrow  SocketMessangerClient 2014" << endl << endl;
+	cout << "C Treulieb, T Garrow  SocketMessengerClient 2014" << endl << endl;
 	cout << "---------------- Configuration ----------------" << endl;
 	bool valid = false;
 	string address;

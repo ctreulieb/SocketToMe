@@ -68,7 +68,7 @@ void constRecv(UDPSocket& socket) {
 					if(addrBook[i].addr != recv.recvAddr)
 						socket.sendToSocket(success, addrBook[i].addr) << currentClient.tag << ": " << recv.msg.str();
 					if(!success)
-						cout << "error sending message to client " << i << endl;
+						cout << "error sending message to client " << addrBook[i].tag << endl;
 				}
 		}
 	}
@@ -77,7 +77,7 @@ regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5]
 regex localHostReg("(L|l)ocal(H|h)ost");
 
 int main() {
-	cout << "C Treulieb, T Garrow  SocketMessangerServer 2014" << endl << endl;
+	cout << "C Treulieb, T Garrow  MessengerServer 2014" << endl << endl;
 	cout << "---------------- Configuration ----------------" << endl;
 	bool valid = false;
 	string address;
@@ -118,7 +118,7 @@ int main() {
 	thread t(constRecv, ref(socket));
 
 	string line;										    
-	cout << "------- Server Running (/quit to stop) --------" << endl;;
+	cout << "------- Server Running (/quit to stop) --------" << endl;
 	while(getline(cin,line)) {
 		if(line == "/quit") {
 			done = true;
