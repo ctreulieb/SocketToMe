@@ -9,8 +9,7 @@
 using namespace std;
 
 bool done = false;
-class ClientInfo {
-public:
+struct ClientInfo {
 	string tag;
 	UDPAddress addr;
 	ClientInfo(string t, UDPAddress a) : tag(t), addr(a) {}
