@@ -1,6 +1,6 @@
 /**	@file: MessengerClient_Main.cpp
 	@author Craig Treulieb 0606138
-	@author Tyler Garrow
+	@author Tyler Garrow 0596301
 	@date 2014-04-20
 	@brief Messenger Client to demonstrate Socket Library usage
 	*/
