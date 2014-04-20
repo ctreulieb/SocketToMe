@@ -27,7 +27,7 @@ void constRecv(UDPSocket& socket) {
 	while(!done) {
 		string line;
 		UDPResponse recv;
-		socket.recvFromSocket(recv, 10) >> line; 
+		socket.recvFromSocket(recv, 5) >> line; 
 		if(recv.timeout || line == "") {
 			continue;
 		}
@@ -51,11 +51,12 @@ void constRecv(UDPSocket& socket) {
 			}
 			addrBook.push_back(Ci);
 			currentClient = Ci;
-			cout << "New Client: " << line << endl;
+			cout << "New Client Connected: " << line << endl;
 		} else {
 			if(line == "/quit") {
 				auto itrErasePos = find(addrBook.begin(), addrBook.end(), currentClient);
 				addrBook.erase(itrErasePos);
+				cout <<  "Client Disconnected: " + currentClient.tag;
 				for(unsigned i = 0; i < addrBook.size(); ++i) {
 					bool success = true;
 						socket.sendToSocket(success, addrBook[i].addr) << currentClient.tag << " has disconnected";
@@ -83,7 +84,6 @@ int main() {
 	string address;
 	do {
 		cout << "IP Address :";
-
 		cin >> address;	
 		if(regex_match(address,ipReg)) {
 			valid = true;
