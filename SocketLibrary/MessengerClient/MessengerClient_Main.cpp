@@ -57,25 +57,34 @@ int main() {
 
 	}while(!valid);
 	UDPSocket socket(address,port);
-	cout << "Connected to socket" << endl;
-	string clientHandl;
-	cout << "Please choose a handle: ";
-	cin >> clientHandl;
+	if(socket.getWSAErrorCode() == 0)
+	{
+		cout << "Socket created" << endl;
+		string clientHandl;
+		cout << "Please choose a handle: ";
+		cin >> clientHandl;
 
-	string line = "";
-	bool success;
-	socket.sendToSocket(success) << clientHandl;
-	thread t(constRecv, ref(socket));
-	while(getline(cin,line)) {
-		if(line != "")
-		{
-			socket.sendToSocket(success) << line;
-			if(line == "/quit")
+		string line = "";
+		bool success;
+		socket.sendToSocket(success) << clientHandl;
+		thread t(constRecv, ref(socket));
+		while(getline(cin,line)) {
+			if(line != "")
 			{
-				done = true;
-				t.join();
-				return 0;
+				socket.sendToSocket(success) << line;
+				if(line == "/quit")
+				{
+					done = true;
+					t.join();
+					return 0;
+				}
 			}
 		}
 	}
+	else
+	{
+		cout << "Error creating socket: " << socket.getWSAErrorCode() << endl;
+		return -1;
+	}
+	
 }

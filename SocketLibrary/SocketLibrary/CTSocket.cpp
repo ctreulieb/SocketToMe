@@ -9,7 +9,6 @@
 CTSocket::CTSocket(std::string addr, int port)
 {
 	WSADATA wsaData;
-	int exitCode = EXIT_SUCCESS;
 	int iResult = WSAStartup(MAKEWORD(2,2),&wsaData);
 };
 

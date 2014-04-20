@@ -112,7 +112,12 @@ int main() {
 	}while(!valid);
 
 	UDPSocket socket(address,port);
-	if(socket.bindSocket())
+	if(socket.getWSAErrorCode() != 0)
+	{
+		cout << "Error creating socket: " << socket.getWSAErrorCode() << endl;
+		return -1;
+	}
+	else if(socket.bindSocket())
 	{
 		cout << "Connection bound." << endl;
 	}else
