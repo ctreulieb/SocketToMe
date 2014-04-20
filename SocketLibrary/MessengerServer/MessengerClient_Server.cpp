@@ -1,3 +1,9 @@
+/**	@file: MessengerClient_Server.cpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow 0596301
+	@date 2014-04-20
+	@brief Messenger Server to demonstrate Socket Library usage
+	*/
 #include<SocketLibrary.hpp>
 #include<iostream>
 #include<vector>
@@ -74,14 +80,14 @@ void constRecv(UDPSocket& socket) {
 		}
 	}
 }
-regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-regex localHostReg("(L|l)ocal(H|h)ost");
 
 int main() {
 	cout << "C Treulieb, T Garrow  MessengerServer 2014" << endl << endl;
 	cout << "---------------- Configuration ----------------" << endl;
 	bool valid = false;
 	string address;
+	regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+	regex localHostReg("(L|l)ocal(H|h)ost");
 	do {
 		cout << "IP Address :";
 		cin >> address;	
@@ -106,7 +112,12 @@ int main() {
 	}while(!valid);
 
 	UDPSocket socket(address,port);
-	if(socket.bindSocket())
+	if(socket.getWSAErrorCode() != 0)
+	{
+		cout << "Error creating socket: " << socket.getWSAErrorCode() << endl;
+		return -1;
+	}
+	else if(socket.bindSocket())
 	{
 		cout << "Connection bound." << endl;
 	}else

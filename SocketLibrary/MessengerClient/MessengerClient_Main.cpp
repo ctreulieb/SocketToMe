@@ -1,3 +1,10 @@
+/**	@file: MessengerClient_Main.cpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow 0596301
+	@date 2014-04-20
+	@brief Messenger Client to demonstrate Socket Library usage
+	*/
+
 #include<SocketLibrary.hpp>
 #include<iostream>
 #include<string>
@@ -7,15 +14,13 @@
 #include<regex>
 using namespace std;
 
-regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-regex localHostReg("(L|l)ocal(H|h)ost");
 bool done;
 
 void constRecv(UDPSocket &socket) {
 	while(!done) {
 		string line;
 		UDPResponse recv;
-		socket.recvFromSocket(recv);
+		socket.recvFromSocket(recv, 10);
 		cout << recv.msg.str() << endl;
 	}
 }
@@ -24,6 +29,8 @@ void constRecv(UDPSocket &socket) {
 int main() {
 	cout << "C Treulieb, T Garrow  SocketMessengerClient 2014" << endl << endl;
 	cout << "---------------- Configuration ----------------" << endl;
+	regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+	regex localHostReg("(L|l)ocal(H|h)ost");
 	bool valid = false;
 	string address;
 	do {
@@ -50,16 +57,34 @@ int main() {
 
 	}while(!valid);
 	UDPSocket socket(address,port);
-	cout << "Conected to socket" << endl;
-	string clientHandl;
-	cout << "Plase choose a handle: ";
-	cin >> clientHandl;
+	if(socket.getWSAErrorCode() == 0)
+	{
+		cout << "Socket created" << endl;
+		string clientHandl;
+		cout << "Please choose a handle: ";
+		cin >> clientHandl;
 
-	string line = "";
-	bool success;
-	socket.sendToSocket(success) << clientHandl;
-	thread t(constRecv, ref(socket));
-	while(getline(cin,line)) {
-		socket.sendToSocket(success) << line;
+		string line = "";
+		bool success;
+		socket.sendToSocket(success) << clientHandl;
+		thread t(constRecv, ref(socket));
+		while(getline(cin,line)) {
+			if(line != "")
+			{
+				socket.sendToSocket(success) << line;
+				if(line == "/quit")
+				{
+					done = true;
+					t.join();
+					return 0;
+				}
+			}
+		}
 	}
+	else
+	{
+		cout << "Error creating socket: " << socket.getWSAErrorCode() << endl;
+		return -1;
+	}
+	
 }

@@ -284,7 +284,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="CTSocket.cpp" />
     <ClCompile Include="TCPImpl.cpp" />
     <ClCompile Include="UDPImpl.cpp" />
   </ItemGroup>

@@ -1,14 +1,17 @@
-#include <Socket.hpp>
+/**	@file: CTSocket.cpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow 0596301
+	@date 2014-04-20
+	@brief Implementation of CTSocket
+	*/
+#include <CTSocket.hpp>
 
-CTSocket::CTSocket(std::string addr, int port)
-{
+CTSocket::CTSocket(std::string addr, int port){
 	WSADATA wsaData;
-	int exitCode = EXIT_SUCCESS;
 	int iResult = WSAStartup(MAKEWORD(2,2),&wsaData);
 };
 
-CTSocket::~CTSocket()
-{
+CTSocket::~CTSocket(){
 	closesocket(hSocket);
 	WSACleanup();
 };

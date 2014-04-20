@@ -1,6 +1,13 @@
+/**	@file: TCPSocket.hpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow 0596301
+	@date 2014-04-20
+	@brief Declaration of TCPSocket, TCPimpl, TCPConnection and TCPResponse
+	*/
+
 #if !defined(TCP_PIMPL_SOCKET)
 #define TCP_PIMPL_SOCKET
-#include <Socket.hpp>
+#include <CTSocket.hpp>
 
 class TCPConnection {
 	friend class TCPSocket;
