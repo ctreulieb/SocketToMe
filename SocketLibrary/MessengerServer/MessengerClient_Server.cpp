@@ -73,14 +73,14 @@ void constRecv(UDPSocket& socket) {
 		}
 	}
 }
-regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-regex localHostReg("(L|l)ocal(H|h)ost");
 
 int main() {
 	cout << "C Treulieb, T Garrow  MessengerServer 2014" << endl << endl;
 	cout << "---------------- Configuration ----------------" << endl;
 	bool valid = false;
 	string address;
+	regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+	regex localHostReg("(L|l)ocal(H|h)ost");
 	do {
 		cout << "IP Address :";
 
