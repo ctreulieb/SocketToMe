@@ -19,8 +19,7 @@ public:
 };
 
 
-class UDPResponse
-{
+class UDPResponse{
 public:
 	int n;
 	std::istringstream msg;

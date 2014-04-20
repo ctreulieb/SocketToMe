@@ -6,14 +6,12 @@
 	*/
 #include <CTSocket.hpp>
 
-CTSocket::CTSocket(std::string addr, int port)
-{
+CTSocket::CTSocket(std::string addr, int port){
 	WSADATA wsaData;
 	int iResult = WSAStartup(MAKEWORD(2,2),&wsaData);
 };
 
-CTSocket::~CTSocket()
-{
+CTSocket::~CTSocket(){
 	closesocket(hSocket);
 	WSACleanup();
 };
