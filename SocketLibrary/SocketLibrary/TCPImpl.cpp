@@ -1,3 +1,9 @@
+/**	@file: TCPImpl.cpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow
+	@date 2014-04-20
+	@brief Implementation of TCPSocket and TCPimpl classes
+	*/
 #include <TCPSocket.hpp>
 
 class TCPSocket::TCPimpl : public CTSocket 

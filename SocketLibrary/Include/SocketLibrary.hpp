@@ -1,3 +1,9 @@
+/**	@file: SocketLibrary.hpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow
+	@date 2014-04-20
+	@brief Main header file for Socket Library
+	*/
 #if !defined( GUARD_MY_SOCKET_GT )
 #define GUARD_MY_SOCKET_GT
 

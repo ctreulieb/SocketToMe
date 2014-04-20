@@ -1,3 +1,10 @@
+/**	@file: MessengerClient_Main.cpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow
+	@date 2014-04-20
+	@brief Messenger Client to demonstrate Socket Library usage
+	*/
+
 #include<SocketLibrary.hpp>
 #include<iostream>
 #include<string>

@@ -1,3 +1,9 @@
+/**	@file: CTSocket.hpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow
+	@date 2014-04-20
+	@brief Declaration of CTSocket
+	*/
 #if !defined( GUARD_BASE_SOCKET)
 #define GUARD_BASE_SOCKET
 #include <string>

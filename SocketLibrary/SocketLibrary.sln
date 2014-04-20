@@ -5,7 +5,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketLibrary", "SocketLibr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8BCC140C-A48D-4B08-9B9C-38379419079B}"
 	ProjectSection(SolutionItems) = preProject
-		Include\Socket.hpp = Include\Socket.hpp
+		Include\CTSocket.hpp = Include\CTSocket.hpp
 		Include\SocketLibrary.hpp = Include\SocketLibrary.hpp
 		Include\TCPSocket.hpp = Include\TCPSocket.hpp
 		Include\UDPSocket.hpp = Include\UDPSocket.hpp

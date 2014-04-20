@@ -18,13 +18,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UDPImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TCPImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CTSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

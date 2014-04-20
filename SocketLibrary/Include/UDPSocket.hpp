@@ -1,6 +1,12 @@
+/**	@file: UDPSocket.hpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow
+	@date 2014-04-20
+	@brief Declaration of UDPSocket, UDPimpl, and UDPAddress
+	*/
 #if !defined(UDP_PIMPL_SOCKET)
 #define UDP_PIMPL_SOCKET
-#include <Socket.hpp>
+#include <CTSocket.hpp>
 
 
 class UDPAddress {

@@ -1,4 +1,10 @@
-#include <Socket.hpp>
+/**	@file: CTSocket.cpp
+	@author Craig Treulieb 0606138
+	@author Tyler Garrow
+	@date 2014-04-20
+	@brief Implementation of CTSocket
+	*/
+#include <CTSocket.hpp>
 
 CTSocket::CTSocket(std::string addr, int port)
 {
