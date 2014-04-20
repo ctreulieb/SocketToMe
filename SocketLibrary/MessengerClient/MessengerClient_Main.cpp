@@ -7,15 +7,13 @@
 #include<regex>
 using namespace std;
 
-regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-regex localHostReg("(L|l)ocal(H|h)ost");
 bool done;
 
 void constRecv(UDPSocket &socket) {
 	while(!done) {
 		string line;
 		UDPResponse recv;
-		socket.recvFromSocket(recv);
+		socket.recvFromSocket(recv, 10);
 		cout << recv.msg.str() << endl;
 	}
 }
@@ -24,6 +22,8 @@ void constRecv(UDPSocket &socket) {
 int main() {
 	cout << "C Treulieb, T Garrow  SocketMessengerClient 2014" << endl << endl;
 	cout << "---------------- Configuration ----------------" << endl;
+	regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+	regex localHostReg("(L|l)ocal(H|h)ost");
 	bool valid = false;
 	string address;
 	do {
@@ -50,9 +50,9 @@ int main() {
 
 	}while(!valid);
 	UDPSocket socket(address,port);
-	cout << "Conected to socket" << endl;
+	cout << "Connected to socket" << endl;
 	string clientHandl;
-	cout << "Plase choose a handle: ";
+	cout << "Please choose a handle: ";
 	cin >> clientHandl;
 
 	string line = "";
@@ -60,6 +60,15 @@ int main() {
 	socket.sendToSocket(success) << clientHandl;
 	thread t(constRecv, ref(socket));
 	while(getline(cin,line)) {
-		socket.sendToSocket(success) << line;
+		if(line != "")
+		{
+			socket.sendToSocket(success) << line;
+			if(line == "/quit")
+			{
+				done = true;
+				t.join();
+				return 0;
+			}
+		}
 	}
 }
