@@ -21,19 +21,24 @@ struct ClientInfo {
 	ClientInfo(string t, UDPAddress a) : tag(t), addr(a) {}
 	ClientInfo() {}
 };
-
 bool operator == (ClientInfo lhs, ClientInfo rhs) {
 	return (lhs.addr == rhs.addr) && (lhs.tag == rhs.tag);
 }
 
 vector<ClientInfo> addrBook;
-
-void constRecv(UDPSocket& socket) {
+/*
+	Thread function
+	@purpose intended to constantly wait for messages from clients and manage the addressbook.
+	Will send messages back to all clients in the address book except the one that the messages was recieved from.
+*/
+void RecvAndSend(UDPSocket& socket) {
 
 	while(!done) {
 		string line;
 		UDPResponse recv;
-		socket.recvFromSocket(recv, 5) >> line; 
+		socket.recvFromSocket(recv, 5) >> line;
+
+		//will not send blank messages to other clients.
 		if(recv.timeout || line == "") {
 			continue;
 		}
@@ -47,6 +52,7 @@ void constRecv(UDPSocket& socket) {
 				currentClient = addrBook[i];
 			} 
 		}
+
 		if(newClient) {
 			ClientInfo Ci(line,recv.recvAddr);
 			for(unsigned i = 0; i < addrBook.size(); ++i) {
@@ -59,6 +65,7 @@ void constRecv(UDPSocket& socket) {
 			currentClient = Ci;
 			cout << "New Client Connected: " << line << endl;
 		} else {
+			//if client is quiting tell other clients and remove them from the addressbook
 			if(line == "/quit") {
 				auto itrErasePos = find(addrBook.begin(), addrBook.end(), currentClient);
 				addrBook.erase(itrErasePos);
@@ -70,6 +77,7 @@ void constRecv(UDPSocket& socket) {
 						cout << "error sending message to client " << currentClient.tag  << endl;
 				}
 			} else
+				//send message to all clients except the one it was recvieved from
 				for(unsigned i = 0; i < addrBook.size(); ++i) {
 					bool success = true;
 					if(addrBook[i].addr != recv.recvAddr)
@@ -88,6 +96,8 @@ int main() {
 	string address;
 	regex ipReg("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 	regex localHostReg("(L|l)ocal(H|h)ost");
+	
+	//prompt user to input a valid IP
 	do {
 		cout << "IP Address :";
 		cin >> address;	
@@ -100,6 +110,8 @@ int main() {
 			cout << "IP not Valid" << endl;
 		}
 	}while(!valid);
+
+	//promt user to imput a valid Port Number
 	valid = false;
 	int port;
 	do {
@@ -126,13 +138,15 @@ int main() {
 		return -1;
 	}
 
-	thread t(constRecv, ref(socket));
+	thread t(RecvAndSend, ref(socket));
 
 	string line;										    
 	cout << "------- Server Running (/quit to stop) --------" << endl;
 	while(getline(cin,line)) {
 		if(line == "/quit") {
 			done = true;
+
+			//tell all clients server is shutting down.
 			for(unsigned i = 0; i < addrBook.size(); ++i)  {
 				bool success = true;
 				socket.sendToSocket(success, addrBook[i].addr) << "Server is shutting down!";
