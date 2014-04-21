@@ -6,6 +6,11 @@
 	*/
 #include <UDPSocket.hpp>
 
+
+/*
+	implementation of compaire operators for UDPAddress
+	@note will use inet_ntop() to turn the sockaddr object into a string then compaire them
+*/
 bool UDPAddress::operator==( UDPAddress addr ) {
 	char leftCharAddres[INET_ADDRSTRLEN], rightCharAddress[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &(this->address.sa_data), leftCharAddres, INET_ADDRSTRLEN);
@@ -13,7 +18,6 @@ bool UDPAddress::operator==( UDPAddress addr ) {
 
 	return ((std::string) leftCharAddres  == (std::string) rightCharAddress);
 }
-
 bool UDPAddress::operator!=( UDPAddress addr ) {
 	char leftCharAddres[INET_ADDRSTRLEN], rightCharAddress[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &(this->address.sa_data), leftCharAddres, INET_ADDRSTRLEN);
@@ -22,6 +26,9 @@ bool UDPAddress::operator!=( UDPAddress addr ) {
 	return ((std::string) leftCharAddres  != (std::string) rightCharAddress);
 }
 
+
+
+/**************** Implementation of UDPimpl *********************************/
 class UDPSocket::UDPimpl : public CTSocket {
 	
 public:
@@ -100,9 +107,33 @@ public:
 	}
 };
 
+/***************************** Implementation of UDPSocket ***********************************/
 int UDPSocket::getWSAErrorCode() {
 	return pUdp_->getWSAErrorCode();
 }
+
+UDPSocket::UDPSocket(std::string addr, int port) : pUdp_(new UDPimpl(addr, port) ) {}
+UDPSocket::~UDPSocket() { }
+UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response) {
+	return pUdp_->recvFromSocket(response);
+}
+UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response, int timeout) {
+	return pUdp_->recvFromSocket(response, timeout);
+}
+
+
+bool UDPSocket::bindSocket() {
+	return pUdp_->bindSocket();
+}
+
+bool UDPSocket::sendToSocketImpl(std::string msg, UDPAddress addr){
+	return pUdp_->sendToSocket(msg,addr.address);
+}
+bool UDPSocket::sendToSocketImpl(std::string msg) {
+	return pUdp_->sendToSocket(msg);
+}
+
+/************ Implementation of UDPSocket SubClass SendStreamWrapper **********************/
 UDPSocket::SendStreamWrapper::SendStreamWrapper(UDPSocket* p, bool& r) : pUDPimpl(p), result(r) {
 	specifiedAddr = false;
 }
@@ -119,17 +150,7 @@ UDPSocket::SendStreamWrapper::~SendStreamWrapper() {
 		result = pUDPimpl->sendToSocketImpl(oss.str());
 }
 
-
 std::ostringstream& UDPSocket::SendStreamWrapper::stream() { return oss; }
-
-UDPSocket::UDPSocket(std::string addr, int port) : pUdp_(new UDPimpl(addr, port) ) {}
-UDPSocket::~UDPSocket() { }
-UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response) {
-	return pUdp_->recvFromSocket(response);
-}
-UDPResponse& UDPSocket::recvFromSocket(UDPResponse &response, int timeout) {
-	return pUdp_->recvFromSocket(response, timeout);
-}
 
 UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool& result) {
 	return UDPSocket::SendStreamWrapper(this, result);
@@ -139,14 +160,3 @@ UDPSocket::SendStreamWrapper UDPSocket::sendToSocket(bool& result, UDPAddress ad
 	return UDPSocket::SendStreamWrapper(this, result, addr);
 }
 
-
-bool UDPSocket::bindSocket() {
-	return pUdp_->bindSocket();
-}
-
-bool UDPSocket::sendToSocketImpl(std::string msg, UDPAddress addr){
-	return pUdp_->sendToSocket(msg,addr.address);
-}
-bool UDPSocket::sendToSocketImpl(std::string msg) {
-	return pUdp_->sendToSocket(msg);
-}
