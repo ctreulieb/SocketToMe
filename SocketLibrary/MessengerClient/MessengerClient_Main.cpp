@@ -15,7 +15,10 @@
 using namespace std;
 
 bool done;
-
+/*
+	Thread function
+	@purpose constantly waits to revieve messages, when a message is recieved it will then display it through cout
+*/
 void constRecv(UDPSocket &socket) {
 	while(!done) {
 		string line;
@@ -39,10 +42,12 @@ int main() {
 		cin >> address;	
 		if(regex_match(address,ipReg)) {
 			valid = true;
-		} else if(regex_match(address, localHostReg)){
+		} 
+		else if(regex_match(address, localHostReg)){
 			valid = true;
 			address = "127.0.1";
-		} else{
+		} 
+		else{
 			cout << "IP not Valid" << endl;
 		}
 	}while(!valid);

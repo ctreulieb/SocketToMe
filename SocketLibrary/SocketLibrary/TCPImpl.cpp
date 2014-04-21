@@ -5,7 +5,7 @@
 	@brief Implementation of TCPSocket and TCPimpl classes
 	*/
 #include <TCPSocket.hpp>
-
+/******************************* Implementation of TCPimpl *************************************/
 class TCPSocket::TCPimpl : public CTSocket{
 public:
 	TCPimpl(std::string addr, int port) : CTSocket(addr, port){
@@ -61,6 +61,7 @@ public:
 	}
 };
 
+/******************************* Implementation of TCPSocket ***********************************/
 TCPSocket::TCPSocket(std::string addr, int port) : pTcp_(new TCPimpl(addr, port)) { }
 TCPSocket::~TCPSocket() { }
 
@@ -83,6 +84,23 @@ TCPResponse& TCPSocket::recvFrom(TCPResponse &response){
 	return pTcp_->recvFrom(response);
 }
 
+bool TCPSocket::bindSocket(){
+	return pTcp_->bindSocket();
+}
+
+void TCPSocket::sendToImpl(std::string msg, TCPConnection conn){
+	pTcp_->sendTo(msg,conn);
+}
+
+void TCPSocket::sendToImpl(std::string msg){
+	pTcp_->sendTo(msg);
+}
+
+int TCPSocket::getWSAErrorCode(){
+	return pTcp_->getWSAErrorCode();
+}
+
+/******************************* Implementation of TCPSocket SubClass SendStreamWrapper ***********/
 TCPSocket::SendStreamWrapper TCPSocket::sendTo(){
 	return TCPSocket::SendStreamWrapper(this);
 }
@@ -106,22 +124,7 @@ TCPSocket::SendStreamWrapper::SendStreamWrapper(TCPSocket* p): pTCPSocket(p){
 	specifiedAddr = false;
 }
 
-bool TCPSocket::bindSocket(){
-	return pTcp_->bindSocket();
-}
-
-void TCPSocket::sendToImpl(std::string msg, TCPConnection conn){
-	pTcp_->sendTo(msg,conn);
-}
-
-void TCPSocket::sendToImpl(std::string msg){
-	pTcp_->sendTo(msg);
-}
-
-int TCPSocket::getWSAErrorCode(){
-	return pTcp_->getWSAErrorCode();
-}
-
+/****************************** Implementation of TCPConnection ************************/
 TCPConnection::~TCPConnection(){
 	closesocket(hAccepted);
 }
