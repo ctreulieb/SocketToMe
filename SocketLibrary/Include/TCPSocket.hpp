@@ -11,6 +11,8 @@
 
 class TCPConnection {
 	friend class TCPSocket;
+public:	
+	~TCPConnection();
 private:
 	SOCKET hAccepted;
 };

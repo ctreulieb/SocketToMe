@@ -113,3 +113,7 @@ void TCPSocket::sendToImpl(std::string msg){
 int TCPSocket::getWSAErrorCode(){
 	return pTcp_->getWSAErrorCode();
 }
+
+TCPConnection::~TCPConnection(){
+	closesocket(hAccepted);
+}

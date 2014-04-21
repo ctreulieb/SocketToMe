@@ -15,11 +15,22 @@ void constRecv(TCPSocket& socket) {
 		string line;
 		TCPResponse response;
 		socket.recvFrom(response) >> line;
-		cout << "recv: "<< line << endl;
+		if(line != "")
+			cout << "recv: "<< line << endl;
 	}
 }
 
 int main(){
+	/* 
+ Leak check --degbug only--
+*/
+	#if defined(_DEBUG)
+	int dbgFlags = ::_CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+		dbgFlags |= _CRTDBG_CHECK_ALWAYS_DF;
+		dbgFlags |=_CRTDBG_DELAY_FREE_MEM_DF; 
+		dbgFlags |= _CRTDBG_LEAK_CHECK_DF; 
+		_CrtSetDbgFlag(dbgFlags  );
+	#endif
 	TCPSocket socket("127.0.1", 45153);
 
 	bool success = socket.connectToSocket();

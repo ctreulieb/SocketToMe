@@ -20,11 +20,13 @@ void recvClient(TCPSocket& socket, TCPConnection& client) {
 		TCPResponse response;
 		socket.recvFrom(response,client);
 		line = response.msg.str();
-		cout << "Recv: " << line << endl;
-		{
-			CSLock d(clintCS);
-			for(unsigned i = 0; i < clients.size(); i++) {
-				socket.sendTo(clients[i]) << line;
+		if(line != ""){
+			cout << "Recv: " << line << endl;
+			{
+				CSLock d(clintCS);
+				for(unsigned i = 0; i < clients.size(); i++) {
+					socket.sendTo(clients[i]) << line;
+				}
 			}
 		}
 	}
@@ -44,6 +46,13 @@ void accecptConnections(TCPSocket& socket) {
 }
 
 int main(){
+	#if defined(_DEBUG)
+		int dbgFlags = ::_CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+		dbgFlags |= _CRTDBG_CHECK_ALWAYS_DF;
+		dbgFlags |=_CRTDBG_DELAY_FREE_MEM_DF; 
+		dbgFlags |= _CRTDBG_LEAK_CHECK_DF; 
+		_CrtSetDbgFlag(dbgFlags  );
+	#endif
 	TCPSocket socket("127.0.1", 45153);
 	bool result = socket.bindSocket();
 	if(!result) {
