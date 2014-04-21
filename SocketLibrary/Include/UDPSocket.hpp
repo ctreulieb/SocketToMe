@@ -34,6 +34,13 @@ class UDPSocket {
 	bool sendToSocketImpl(std::string msg, UDPAddress);
 	bool sendToSocketImpl(std::string msg); 
 public:
+	/* SubClass SendStreamWrapper
+		@purpose is a wrapper for std::ostringstream that gets returned when 
+		sending a message enabling the user of UDPSocket to use the send function as a ostreamstream
+		@ex  sendToSocket(bool) << "foo" << "barr";
+
+		@notes operator << is overloaded to call stream() to access the ostringstream inside
+	*/
 	class SendStreamWrapper {
 		UDPSocket* pUDPimpl;
 		std::ostringstream oss;
