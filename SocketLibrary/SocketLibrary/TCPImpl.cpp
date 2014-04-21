@@ -32,6 +32,10 @@ public:
 		int const MAX_LINE= 8000;
 		char msg[MAX_LINE];
 		response.n = recv(hSocket, msg,MAX_LINE,0);
+		if( response.n != -1)
+			msg[min(response.n,7999)]=0;
+		else
+			msg[0] = 0;
 		response.msg = std::istringstream(msg);
 		return response;
 	}
@@ -40,6 +44,10 @@ public:
 		int const MAX_LINE= 8000;
 		char msg[MAX_LINE];
 		response.n = recv(conn.hAccepted, msg,MAX_LINE,0);
+		if( response.n != -1)
+			msg[min(response.n,7999)]=0;
+		else
+			msg[0] = 0;
 		response.msg = std::istringstream(msg);
 		return response;
 	}
